@@ -4,6 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockXChallenge", "StockXChallenge\StockXChallenge.csproj", "{25D8764A-20EE-488E-AE0C-36D5E79EB1A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PortfolioController", "PortfolioController", "{5294EB94-BA62-4C48-A22B-CC44C7E07974}"
+	ProjectSection(SolutionItems) = preProject
+		StockXChallenge\CsvWrite.cs = StockXChallenge\CsvWrite.cs
+		StockXChallenge\DataBuilder.cs = StockXChallenge\DataBuilder.cs
+		StockXChallenge\Dealers.cs = StockXChallenge\Dealers.cs
+		StockXChallenge\Fomulas.cs = StockXChallenge\Fomulas.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioController", "..\Portfolio\PortfolioController\PortfolioController.csproj", "{52412994-29DA-4151-9595-6E48303DFD6C}"
 EndProject
