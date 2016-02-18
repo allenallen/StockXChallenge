@@ -72,10 +72,6 @@ for loop in combinations:
 		
 	
 3. Use GIT to update code
-<<<<<<< HEAD
-=======
 
 
-
-
->>>>>>> e300db497d7efb1f775f653ec50d5860f42c9edd
+UPDATE HERE
