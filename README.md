@@ -16,7 +16,29 @@ portfolio.com
 pre req:
 	1. create a table cash (auto table identity id must be present)
 	2. update entity model from db 
-
+	3. Formulas:
+		a. Gross: Cost * Volume
+		b. Commission: if(Cost * Volume * .0025) < 20) return 20
+						else return (Cost * Volume * .0025)
+		c. VAT12%: Commission * .12
+		d. Sales Tax: Gross * .005
+		e. PCD/SCCP: Gross * .0001
+		f. Buy Price: Gross * Commission * Vat12 * PCD/SCCP
+		g. Sell Price: Gross - (Commission + Vat12 + Sales Tax + PCD/SCCP)
+		h. Net Price: if (BUY) return Buy Price; 
+						else if (SELL) return Sell PRICE|QUANTITY		
+							else if (IN) return .01
+		i. SUM of net Price: if (firstTransaction) return Net Price 
+								else 
+									if(SELL) return previousAverageCost * Net Volume
+									else return previous SUM of net Price + current Net Price
+		j. Net Volume: 	if (firstTransaction) return if (SELL) 0 : Volume
+						else 
+							if (SELL): return previous Net volume + -(current Volume)
+							else return previous Net volume + current Column
+		k. Average Cost: 	if Net Volume == 0: return 	0
+							else SUM of net Price / Net Volume
+		
 to maintain cash balance:
 1. initial load of cash
 	a. read cash.txt
