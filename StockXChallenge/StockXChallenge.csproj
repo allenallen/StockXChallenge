@@ -137,12 +137,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Portfolio\PortfolioController\PortfolioController.csproj">
-      <Project>{52412994-29da-4151-9595-6e48303dfd6c}</Project>
-      <Name>PortfolioController</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
