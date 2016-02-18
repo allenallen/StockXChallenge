@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="StockXDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="StockXDbModelStoreContainer">
+    <EntitySet Name="Cash" EntityType="StockXDbModel.Store.Cash" store:Type="Tables" />
+  </EntityContainer>
+  <EntityType Name="Cash">
+    <Key>
+      <PropertyRef Name="CashId" />
+    </Key>
+    <Property Name="CashId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="OtCode" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+</Schema>

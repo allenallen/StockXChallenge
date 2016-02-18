@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="StockXDbModelStoreContainer" CdmEntityContainer="StockXDbEntities">
+    <EntitySetMapping Name="Cashes">
+      <EntityTypeMapping TypeName="StockXDbModel.Cash">
+        <MappingFragment StoreEntitySet="Cash">
+          <ScalarProperty Name="OtCode" ColumnName="OtCode" />
+          <ScalarProperty Name="CashId" ColumnName="CashId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
