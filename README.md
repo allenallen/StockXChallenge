@@ -27,7 +27,37 @@ to maintain cash balance:
 		--create utils.cs
 		--create read file method ->  string[]
 		--create method that loops through the string[] and insert parsed data into database
-				
+			
+
+Unit Testing.
+
+
+util.calculateAverageCost(stockCode, quantity, price)
+
+
+
+return avgcost
+
+
+TestCalculateAverageCost()
+
+
+for loop in combinations:
+
+	avgCost = util.calculateAvgCost(stockCode, quantity, price)
+
+		assert avgCost, knownAveCost(stockCode, quantity, price) 
+
+			if not equal fail test
+
+
+			def knownAveCost(knownAveCost):
+			list = [stockCode, quantity, price, avgcost]
+
+			  if stockCode, quantity, price == "given"
+
+			  return avgcost
+			     
 2. We process the filled orders text file.
 	a. read filledorders.txt
 	b. get one line from array
