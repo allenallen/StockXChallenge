@@ -2,6 +2,7 @@
 <Schema Namespace="StockXDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="StockXDbModelStoreContainer">
     <EntitySet Name="Cash" EntityType="StockXDbModel.Store.Cash" store:Type="Tables" />
+    <EntitySet Name="ClientAverageCost" EntityType="StockXDbModel.Store.ClientAverageCost" store:Type="Tables" />
   </EntityContainer>
   <EntityType Name="Cash">
     <Key>
@@ -9,5 +10,26 @@
     </Key>
     <Property Name="CashId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="OtCode" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="ClientAverageCost">
+    <Key>
+      <PropertyRef Name="ClientAverageCostID" />
+    </Key>
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Side" Type="nvarchar" MaxLength="100" />
+    <Property Name="Cost" Type="money" />
+    <Property Name="Volume" Type="int" />
+    <Property Name="ClientAverageCostID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="Gross" Type="float" />
+    <Property Name="Commission" Type="float" />
+    <Property Name="Vat12" Type="float" />
+    <Property Name="SalesTax" Type="float" />
+    <Property Name="PCD/SCCP" Type="float" />
+    <Property Name="BuyPrice" Type="float" />
+    <Property Name="SellPrice" Type="float" />
+    <Property Name="NetPrice" Type="float" />
+    <Property Name="SumNetPrice" Type="float" />
+    <Property Name="NetVolume" Type="float" />
+    <Property Name="AverageCost" Type="float" />
   </EntityType>
 </Schema>

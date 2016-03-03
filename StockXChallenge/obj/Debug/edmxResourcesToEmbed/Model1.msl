@@ -9,5 +9,27 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ClientAverageCosts">
+      <EntityTypeMapping TypeName="StockXDbModel.ClientAverageCost">
+        <MappingFragment StoreEntitySet="ClientAverageCost">
+          <ScalarProperty Name="AverageCost" ColumnName="AverageCost" />
+          <ScalarProperty Name="NetVolume" ColumnName="NetVolume" />
+          <ScalarProperty Name="SumNetPrice" ColumnName="SumNetPrice" />
+          <ScalarProperty Name="NetPrice" ColumnName="NetPrice" />
+          <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+          <ScalarProperty Name="BuyPrice" ColumnName="BuyPrice" />
+          <ScalarProperty Name="PCD_SCCP" ColumnName="PCD/SCCP" />
+          <ScalarProperty Name="SalesTax" ColumnName="SalesTax" />
+          <ScalarProperty Name="Vat12" ColumnName="Vat12" />
+          <ScalarProperty Name="Commission" ColumnName="Commission" />
+          <ScalarProperty Name="Gross" ColumnName="Gross" />
+          <ScalarProperty Name="ClientAverageCostID" ColumnName="ClientAverageCostID" />
+          <ScalarProperty Name="Volume" ColumnName="Volume" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="Side" ColumnName="Side" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

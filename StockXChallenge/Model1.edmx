@@ -7,6 +7,7 @@
     <Schema Namespace="StockXDbModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="StockXDbModelStoreContainer">
           <EntitySet Name="Cash" EntityType="StockXDbModel.Store.Cash" store:Type="Tables" />
+          <EntitySet Name="ClientAverageCost" EntityType="StockXDbModel.Store.ClientAverageCost" store:Type="Tables" />
         </EntityContainer>
         <EntityType Name="Cash">
           <Key>
@@ -15,12 +16,34 @@
           <Property Name="CashId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="OtCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="ClientAverageCost">
+          <Key>
+            <PropertyRef Name="ClientAverageCostID" />
+          </Key>
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Side" Type="nvarchar" MaxLength="100" />
+          <Property Name="Cost" Type="money" />
+          <Property Name="Volume" Type="int" />
+          <Property Name="ClientAverageCostID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Gross" Type="float" />
+          <Property Name="Commission" Type="float" />
+          <Property Name="Vat12" Type="float" />
+          <Property Name="SalesTax" Type="float" />
+          <Property Name="PCD/SCCP" Type="float" />
+          <Property Name="BuyPrice" Type="float" />
+          <Property Name="SellPrice" Type="float" />
+          <Property Name="NetPrice" Type="float" />
+          <Property Name="SumNetPrice" Type="float" />
+          <Property Name="NetVolume" Type="float" />
+          <Property Name="AverageCost" Type="float" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StockXDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="StockXDbEntities" p1:LazyLoadingEnabled="true" >
           <EntitySet Name="Cashes" EntityType="StockXDbModel.Cash" />
+          <EntitySet Name="ClientAverageCosts" EntityType="StockXDbModel.ClientAverageCost" />
         </EntityContainer>
         <EntityType Name="Cash">
           <Key>
@@ -28,6 +51,27 @@
           </Key>
           <Property Type="Int32" Name="CashId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="OtCode" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ClientAverageCost">
+          <Key>
+            <PropertyRef Name="ClientAverageCostID" />
+          </Key>
+          <Property Type="DateTime" Name="Date" Precision="3" />
+          <Property Type="String" Name="Side" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="Cost" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="Volume" />
+          <Property Type="Int32" Name="ClientAverageCostID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Double" Name="Gross" />
+          <Property Type="Double" Name="Commission" />
+          <Property Type="Double" Name="Vat12" />
+          <Property Type="Double" Name="SalesTax" />
+          <Property Type="Double" Name="PCD_SCCP" />
+          <Property Type="Double" Name="BuyPrice" />
+          <Property Type="Double" Name="SellPrice" />
+          <Property Type="Double" Name="NetPrice" />
+          <Property Type="Double" Name="SumNetPrice" />
+          <Property Type="Double" Name="NetVolume" />
+          <Property Type="Double" Name="AverageCost" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -40,6 +84,28 @@
               <MappingFragment StoreEntitySet="Cash">
                 <ScalarProperty Name="OtCode" ColumnName="OtCode" />
                 <ScalarProperty Name="CashId" ColumnName="CashId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientAverageCosts">
+            <EntityTypeMapping TypeName="StockXDbModel.ClientAverageCost">
+              <MappingFragment StoreEntitySet="ClientAverageCost">
+                <ScalarProperty Name="AverageCost" ColumnName="AverageCost" />
+                <ScalarProperty Name="NetVolume" ColumnName="NetVolume" />
+                <ScalarProperty Name="SumNetPrice" ColumnName="SumNetPrice" />
+                <ScalarProperty Name="NetPrice" ColumnName="NetPrice" />
+                <ScalarProperty Name="SellPrice" ColumnName="SellPrice" />
+                <ScalarProperty Name="BuyPrice" ColumnName="BuyPrice" />
+                <ScalarProperty Name="PCD_SCCP" ColumnName="PCD/SCCP" />
+                <ScalarProperty Name="SalesTax" ColumnName="SalesTax" />
+                <ScalarProperty Name="Vat12" ColumnName="Vat12" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="Gross" ColumnName="Gross" />
+                <ScalarProperty Name="ClientAverageCostID" ColumnName="ClientAverageCostID" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Side" ColumnName="Side" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

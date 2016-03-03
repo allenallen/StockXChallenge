@@ -16,7 +16,7 @@ to maintain cash balance:
 pre req:
 1. create a table cash (auto table identity id must be present)
 2. update entity model from db 
-1. initial load of cash
+1. initial load of cash -- DONE
 	a. read cash.txt
 	b. get one line
 	c. parse with vertical bar

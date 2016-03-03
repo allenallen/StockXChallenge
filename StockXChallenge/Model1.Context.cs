@@ -26,5 +26,6 @@ namespace StockXChallenge
         }
     
         public DbSet<Cash> Cashes { get; set; }
+        public DbSet<ClientAverageCost> ClientAverageCosts { get; set; }
     }
 }

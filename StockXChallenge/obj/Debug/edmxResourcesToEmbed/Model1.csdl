@@ -2,6 +2,7 @@
 <Schema Namespace="StockXDbModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="StockXDbEntities" p1:LazyLoadingEnabled="true">
     <EntitySet Name="Cashes" EntityType="StockXDbModel.Cash" />
+    <EntitySet Name="ClientAverageCosts" EntityType="StockXDbModel.ClientAverageCost" />
   </EntityContainer>
   <EntityType Name="Cash">
     <Key>
@@ -9,5 +10,26 @@
     </Key>
     <Property Type="Int32" Name="CashId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Type="String" Name="OtCode" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ClientAverageCost">
+    <Key>
+      <PropertyRef Name="ClientAverageCostID" />
+    </Key>
+    <Property Type="DateTime" Name="Date" Precision="3" />
+    <Property Type="String" Name="Side" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Type="Decimal" Name="Cost" Precision="19" Scale="4" />
+    <Property Type="Int32" Name="Volume" />
+    <Property Type="Int32" Name="ClientAverageCostID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="Double" Name="Gross" />
+    <Property Type="Double" Name="Commission" />
+    <Property Type="Double" Name="Vat12" />
+    <Property Type="Double" Name="SalesTax" />
+    <Property Type="Double" Name="PCD_SCCP" />
+    <Property Type="Double" Name="BuyPrice" />
+    <Property Type="Double" Name="SellPrice" />
+    <Property Type="Double" Name="NetPrice" />
+    <Property Type="Double" Name="SumNetPrice" />
+    <Property Type="Double" Name="NetVolume" />
+    <Property Type="Double" Name="AverageCost" />
   </EntityType>
 </Schema>
