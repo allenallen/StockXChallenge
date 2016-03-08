@@ -1,0 +1,10 @@
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\StockXDataBase.sdf
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\UnitTestProject1.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\UnitTestProject1.pdb
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\PortfolioController.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\EntityFramework.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\PortfolioController.pdb
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\EntityFramework.xml
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\obj\Debug\UnitTestProject1.csprojResolveAssemblyReference.cache
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\obj\Debug\UnitTestProject1.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\obj\Debug\UnitTestProject1.pdb

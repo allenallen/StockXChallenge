@@ -37,8 +37,10 @@ pre req:
 	d. update 
 
 
-3. Process each filled orders by creating a ledger:
+3. Process each filled orders by creating a soa:
 	a. run query via StockXDBController
+		-add description of transaction
+		-"bought X shares at Y price"
 	b. get one line from reader
 	c. append each line to a csv.
 	d. format is this: example of format.
@@ -50,7 +52,7 @@ pre req:
 	d. Use date, UserId, AccountCode, StockCode as composite key 
 	e. 
 
-5. Process each summary orders by creating a postcost:
+5. Process each summary orders by creating a poscost:
 	a. run query via StockXDBController
 	b. get one line from reader
 	c. update balance in portfolio ( we might need a portfolio table. use same columns as poscost) 
