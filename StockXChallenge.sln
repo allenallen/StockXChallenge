@@ -9,7 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioController", "..\P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CF0C8F9-663C-4718-B553-345AB40BE03F}"
 	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Desktop\txtfiles\022616PM\CASH.TXT = ..\..\..\..\Desktop\txtfiles\022616PM\CASH.TXT
+		..\..\..\..\Desktop\txtfiles\022616PM\clients.txt = ..\..\..\..\Desktop\txtfiles\022616PM\clients.txt
+		..\..\..\..\Desktop\txtfiles\022616PM\pledge.txt = ..\..\..\..\Desktop\txtfiles\022616PM\pledge.txt
 		..\..\..\..\Downloads\sftp files\poscost-07-29-15.txt = ..\..\..\..\Downloads\sftp files\poscost-07-29-15.txt
+		..\..\..\..\Desktop\txtfiles\022616PM\soa.txt = ..\..\..\..\Desktop\txtfiles\022616PM\soa.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{F3A1C397-7AB9-4B4C-BE38-2A43340183CB}"
