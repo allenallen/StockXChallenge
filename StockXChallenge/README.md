@@ -1,8 +1,55 @@
 # StockXChallenge plan
-
 todo:
-1. create poscos table (portfolio balance)
-2. add sample files to the solution. client.txt, postcos, ledger 
+1. create test cases:
+   a. one record only same date
+   a. two records same date
+   a. three records same date
+todo:
+1. generate poscost
+   a. get first record.
+   b. get last periods record.
+
+   a. run query via StockXDBController using MatchedOrder table
+   b. save all records.
+   c. get all records we just saved
+
+   if first record is same as last record 
+     then add first record to the list of just recently saved records and apply first record formula (compute avg cost first)
+	 and apply 2nd record formula to the rest of the list
+	 then save all items table
+   if different:
+       we use last record as first record added on the list then we don't apply first record formula
+	   we use 2nd record formula all the remaining items in the list and first record will be un-touched
+	   then save remaining items to table
+
+   a.a.a first check if there is no record yet for account and stock
+   b. if no record then save all three records and remember the first record as the first buy.
+   if there is one record, we determine if it is part of the group and apply different formula.
+   rest of formula to the remaining records.
+   
+   
+    
+   
+   a.a select top 2 * from MatchedOrder order by date desc
+   b. Loop thru using account and stock
+   b.a transform List<MatchOrder> to List<ClientAverageCost>
+   c.a. Process each line with average cost calculator
+   c.c feed to calculator
+   d.d transform List<ClientAverageCost> back to List<MatchOrder>
+   e.b. save to table the update avg_cost
+   f.c  (query table and make sure values match)
+   g. append each line to a csv.
+   h. format: A00001-1;BDO;5000;105.2281
+   i.a account_code;stock_code;volume;avg_cost
+2. generate soa
+		-add description of transaction
+		-"bought X shares at Y price"
+3. validation
+   a. add validation to filter input data.  throw an error if List is not two on the right level
+   b. add validation before outputting data
+todo:
+1. create poscos table (portfolio balance) done
+2. add sample files to the solution. client.txt, postcos, soa done
 
 
 Filled Orders Report
