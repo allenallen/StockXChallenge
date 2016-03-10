@@ -1,5 +1,8 @@
 # StockXChallenge plan
 todo:
+1. combine all test cases for db in one logic and workflow
+
+todo:
 1. create test cases:
    a. one record only same date
    a. two records same date
