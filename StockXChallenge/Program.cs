@@ -10,19 +10,39 @@ namespace StockXChallenge
 {
     class Program
     {
+        static void MainC(string[] args)
+        {
+            var s = new StockXDBController();
+            var list = s.GetReport1();
+            s.SaveNewListToDB(list);
+            Console.WriteLine("done saving.");
+            Console.ReadKey();
+        }
         static void Main(string[] args)
+        {
+            var s = new StockXDBController();
+            var date = DateTime.Now;
+            //.GroupBy(x => new { x.Column1, x.Column2 })
+            
+            var todayList = s.GetAllTodayRecords();
+            s.ProcessOrders(todayList);
+            
+            Console.WriteLine("Hit any key");
+            Console.ReadKey();
+        }
+        static void B(string[] args)
         {
             var s = new StockXDBController();
             var lastList = s.GetFirstAndLastRecord("TEST12347", "TEST");
 
-            
+
 
             MatchedOrder current = new MatchedOrder()
             {
                 AccountCode = "TEST12347",
                 UserId = "TESTACCOUNT",
                 MatchedOrderID = 5,
-                OrderDatetime = new DateTime(2025, 6, 1,6,0,0),
+                OrderDatetime = new DateTime(2025, 6, 1, 6, 0, 0),
                 Side = "BUY",
                 StockCode = "TEST",
                 BoardLot = "MAIN",
@@ -30,14 +50,14 @@ namespace StockXChallenge
                 Price = 8.0M,
                 Quantity = 2000
             };
-            var currentList = new List<MatchedOrder>();
+            List<MatchedOrder> currentList = new List<MatchedOrder>();
             currentList.Add(current);
             current = new MatchedOrder()
             {
                 AccountCode = "TEST12347",
                 UserId = "TESTACCOUNT",
                 MatchedOrderID = 6,
-                OrderDatetime = new DateTime(2025, 6, 1,10,0,0),
+                OrderDatetime = new DateTime(2025, 6, 1, 10, 0, 0),
                 Side = "SELL",
                 StockCode = "TEST",
                 BoardLot = "MAIN",
@@ -46,18 +66,20 @@ namespace StockXChallenge
                 Quantity = 3000
             };
             currentList.Add(current);
-            
+
             if (lastList.Count != 0)
             {
+                currentList.Reverse();
                 currentList.Add(lastList[0]);
+                currentList.Reverse();
                 //perform a first buy operation
                 //create an empty record
             }
-            currentList = currentList.OrderBy(o => o.OrderDatetime).ToList();
-            
+            //currentList = currentList.OrderBy(o => o.OrderDatetime).ToList();
+
             //s.CheckFirstAndLastRecord(currentList);
             List<ClientAverageCost> cList = s.TransformMatchedOrder(currentList);
-            s.CalculateAvgCost(cList);
+            s.CalculateAvgCost(currentList, cList);
 
             foreach (var c in cList)
             {
@@ -136,18 +158,18 @@ namespace StockXChallenge
             }
 
             var list = sControl.TransformMatchedOrder(currentQuery);
-            sControl.CalculateAvgCost(list);
+            sControl.CalculateAvgCost(currentQuery,list);
             Console.WriteLine(list[1].AverageCost);
             Console.WriteLine(list[1].SumOfNetPrice);
             Console.WriteLine(list[1].NetVolume);
             Console.ReadKey();
         }
-        static void Main5(string[] args)
+        static void MainA(string[] args)
         {
             var s = new StockXDBController();
-            DateTime baseDate = new DateTime(2015, 7, 15,23,0,0);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST",baseDate);
-            List<MatchedOrder> firstAndLast = s.GetFirstAndLastRecord("TEST12345", "TEST");
+            DateTime baseDate = new DateTime(2015, 7, 16,23,0,0);
+            List<MatchedOrder> list = s.GetMatchedOrders("TEST12348", "TEST",baseDate);
+            List<MatchedOrder> firstAndLast = s.GetFirstAndLastRecord("TEST12348", "TEST");
             list.Reverse();
 
             List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
@@ -178,7 +200,7 @@ namespace StockXChallenge
                 Console.WriteLine("--");
             }
 
-            s.CalculateAvgCost(clientList);
+            s.CalculateAvgCost(list,clientList);
             Console.WriteLine("-----------------------");
             Console.WriteLine("ClientAverageCost AverageCost Calculation");
             Console.WriteLine("-----------------------");
@@ -189,6 +211,47 @@ namespace StockXChallenge
                 Console.WriteLine("Average Cost: {0}", client.AverageCost);
                 Console.WriteLine("--");
             }
+            Console.WriteLine("MatchedOrder List After Calculation");
+            Console.WriteLine("-----------------------");
+            foreach (MatchedOrder item in list)
+            {
+                Console.WriteLine("Account Code: {0}", item.AccountCode);
+                Console.WriteLine("User ID: {0}", item.UserId);
+                Console.WriteLine("Side: {0}", item.Side);
+                Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
+                Console.WriteLine("Stock Code: {0}", item.StockCode);
+                Console.WriteLine("Price: {0}", item.Price);
+                Console.WriteLine("Quantity: {0}", item.Quantity);
+                Console.WriteLine("Match Date: {0}", item.MatchDate);
+                Console.WriteLine("Net Price: {0}", item.NetPrice);
+                Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
+                Console.WriteLine("Net Volume: {0}", item.NetVolume);
+                Console.WriteLine("Avg Cost: {0}", item.AvgCost);
+                Console.WriteLine("--");
+            }
+
+            s.SaveToDB(list);
+
+
+            List<MatchedOrder> newlist = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
+
+            foreach (MatchedOrder item in newlist)
+            {
+                Console.WriteLine("new Account Code: {0}", item.AccountCode);
+                Console.WriteLine("User ID: {0}", item.UserId);
+                Console.WriteLine("Side: {0}", item.Side);
+                Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
+                Console.WriteLine("Stock Code: {0}", item.StockCode);
+                Console.WriteLine("Price: {0}", item.Price);
+                Console.WriteLine("Quantity: {0}", item.Quantity);
+                Console.WriteLine("Match Date: {0}", item.MatchDate);
+                Console.WriteLine("Net Price: {0}", item.NetPrice);
+                Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
+                Console.WriteLine("Net Volume: {0}", item.NetVolume);
+                Console.WriteLine("Avg Cost: {0}", item.AvgCost);
+                Console.WriteLine("new --");
+            }
+
 
             Console.ReadKey();
         }

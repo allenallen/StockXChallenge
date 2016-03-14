@@ -1,6 +1,35 @@
 # StockXChallenge plan
 todo:
-1. combine all test cases for db in one logic and workflow
+1. create cash table: use correct columns
+1.a add dummy values
+2.a Get latest cash per account
+2.b add total portfolio value to cash (positive or negative).  Total portfolio is the sum of all last record per stock.
+2.b.b. total positions = sum of all stock's avgcost * net volume
+2.b.b.c cash = previous cash - current total positions
+2.c generate cash.txt with this format OT3530-2;4440.13;.0000;4440.13
+3. 
+
+todo:
+1.get all records
+2.sort by account then by date
+3.write soa.txt file
+2.            //A00001-1;01/15/2016;SI-107149;Sale of DMC 100000 shares @ 12.1200 
+            //A01618-0;12/29/2015;BI-175968;Purchase of MER 3260 shares @ 317.4000
+todo:done
+1. Let's create 3 accounts in table.  With different cases:
+2. Let's create a script that will get only the last record of the matched order per account per stock.  this step is right after all 
+avg cost calculation is done.
+2. We get a list of all matched orders for today.
+2.a. Get all records sorted by account and stock and date.
+2.a.a  Loop thru records
+2.b. via LinQ, get only per stock per account.
+2.c. Sort by date. Grab only the first record
+2.d. append it to postcost. Save two files. One has today's date poscost-<date>.txt and one just latest poscost.txt
+
+
+todo:
+1. combine all test cases for db in one logic and workflow done.
+
 
 todo:
 1. create test cases:

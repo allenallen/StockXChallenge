@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioController;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace UnitTestProject1
 {
@@ -44,6 +45,22 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void PoscostFileTest()
+        {
+            var s = new StockXDBController();
+            var date = new DateTime(2016,3,14);
+            s.GeneratePosCost(date);
+            
+            string poscostFilePath = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString();
+
+            Assert.IsTrue(File.Exists(poscostFilePath + "poscost.txt"));
+
+            var lines = File.ReadAllLines(poscostFilePath + "poscost.txt");
+            //Assert.IsTrue(lines.Length == 2);
+
+        }
+
+        [TestMethod]
         public void TestDBTwoSellBuy()
         {
 
@@ -55,10 +72,10 @@ namespace UnitTestProject1
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 15,23,0,0);
             List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
-            list.Reverse();
+           // list.Reverse();
 
             List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
-            s.CalculateAvgCost(clientList);
+            s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.20M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
             Assert.IsTrue(clientList[0].NetVolume == 5000);
@@ -71,10 +88,10 @@ namespace UnitTestProject1
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 15, 23, 0, 0);
             List<MatchedOrder> list = s.GetMatchedOrders("TEST12346", "TEST", baseDate);
-            list.Reverse();
+            //list.Reverse();
 
             List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
-            s.CalculateAvgCost(clientList);
+            s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.45M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 1.45m);
             Assert.IsTrue(clientList[0].NetVolume == 19000);
@@ -87,10 +104,10 @@ namespace UnitTestProject1
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 1);
             List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
-            list.Reverse();
+            //list.Reverse();
 
             List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
-            s.CalculateAvgCost(clientList);
+            s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.2M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
             Assert.IsTrue(clientList[0].NetVolume == 5000);
@@ -106,7 +123,7 @@ namespace UnitTestProject1
             list.Reverse();
 
             List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
-            s.CalculateAvgCost(clientList);
+            s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.20M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
             Assert.IsTrue(clientList[0].NetVolume == 5000);
@@ -163,11 +180,11 @@ namespace UnitTestProject1
 
             //s.CheckFirstAndLastRecord(currentList);
             List<ClientAverageCost> cList = s.TransformMatchedOrder(currentList);
-            s.CalculateAvgCost(cList);
-            Assert.IsTrue(cList[1].SumOfNetPrice == 21500M);
-            Assert.IsTrue(cList[1].AverageCost == 5.3750M);
-            Assert.IsTrue(cList[2].SumOfNetPrice == 5375M);
-            Assert.IsTrue(cList[2].AverageCost == 5.3750M);
+            s.CalculateAvgCost(currentList,cList);
+            Assert.IsTrue(cList[1].SumOfNetPrice == 25500M);
+            Assert.IsTrue(cList[1].AverageCost == 5.1M);
+            Assert.IsTrue(cList[2].SumOfNetPrice == 10200M);
+            Assert.IsTrue(cList[2].AverageCost == 5.1M);
 
         }
 
@@ -512,5 +529,7 @@ namespace UnitTestProject1
             Assert.IsTrue(list[0].NetVolume == 1000);
 
         }
+
+        public string ConfigurationManager { get; set; }
     }
 }
