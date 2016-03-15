@@ -10,24 +10,61 @@ namespace StockXChallenge
 {
     class Program
     {
-        static void MainC(string[] args)
+
+        static void Run(string[] args)
+        {
+            GetFilledOrdersFromTechni();
+            ProcessOrdersFromTechni(args);
+
+        }
+        static void GetFilledOrdersFromTechni()
         {
             var s = new StockXDBController();
             var list = s.GetReport1();
             s.SaveNewListToDB(list);
-            Console.WriteLine("done saving.");
+            Console.WriteLine("Done saving filled orders from Techni.");
+        }
+
+        static void ProcessAll(string[] args)
+        {
+            var s = new StockXDBController();
+            var date = new DateTime(2015,7,15);
+            //.GroupBy(x => new { x.Column1, x.Column2 })
+
+            var todayList = s.GetAllPreviousRecordsByDate(date);
+
+            foreach (MatchedOrder o in todayList)
+            {
+                Console.WriteLine(o.OrderDatetime);
+
+            }
+            s.ProcessOrders(todayList,date);
+
+            s.GeneratePosCost(date);
+            
+            Console.WriteLine("Hit any key");
             Console.ReadKey();
         }
         static void Main(string[] args)
+        {
+            Run(args);
+        }
+        static void Main555(string[] args)
+        {
+            ProcessAll(args);
+        }
+        static void ProcessOrdersFromTechni(string[] args)
         {
             var s = new StockXDBController();
             var date = DateTime.Now;
             //.GroupBy(x => new { x.Column1, x.Column2 })
             
             var todayList = s.GetAllTodayRecords();
-            s.ProcessOrders(todayList);
-            
-            Console.WriteLine("Hit any key");
+            s.ProcessOrders(todayList,date);
+
+            s.GeneratePosCost(date);
+            s.GenerateSOA(date);
+            Console.WriteLine("Finished Processing orders from Techni. Hit any key");
             Console.ReadKey();
         }
         static void B(string[] args)
