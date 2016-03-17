@@ -1,11 +1,24 @@
 # StockXChallenge plan
 todo:
-1. we change the soa to one liner per account per stock date sorted.
+1. create client.txt from cash (good)
+format:
+account, name, address, phone, commission, N, C,5, 11011205464539
+OT9521-7;MARCO N. ACCAD;Unit 406 Danube Bldg., Riverfront Residences Caniogan, Pasig 1606 ;(0917)862-8504 631-8734;0.0025;N;C;5;11011205464539
+
+1. create pledge.txt from client.txt
+1. Leaderboard:
+a. Get All stockx challenger participants. (possible all accounts that is in cash table)
+b. then we compute the cash + equity = 
+  sum of all stocks owned (get current closing price) * volume per account
+
+  order by new column descending
+todo:
+1. we change the soa to one liner per account per stock date sorted. done
 2. add email capability. 
 3. add windows task.
-4. move connection string to app config.
-5. back up the sdf. copy and rename to daily filename.
-6. ask techni for a client txt dump.
+4. move connection string to app config. done
+5. back up the sdf. copy and rename to daily filename. done
+6. ask techni for a client txt dump. 
 7. back up uat server.
 
 todo: (done all)
