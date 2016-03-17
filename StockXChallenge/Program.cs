@@ -32,11 +32,26 @@ namespace StockXChallenge
         static void Run(string[] args)
         {
             //call it here
+
+            Backup();
             GetFilledOrdersFromTechni();
 
             //calculate average costs and cash
             ProcessOrdersFromTechni(args);
 
+        }
+
+        private static void Backup()
+        {
+            var s = new StockXDBController();
+            try
+            {
+                s.BackupDB();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         static void GetFilledOrdersFromTechni()
         {
@@ -80,9 +95,11 @@ namespace StockXChallenge
         }
         static void Main(string[] args)
         {
+            
             //CheckDB(args);
             Run(args);
             //testCashUnit(args);
+            
             Console.ReadKey();
         }
         static void testCashUnit(string[] args)
@@ -98,7 +115,7 @@ namespace StockXChallenge
             var s = new StockXDBController();
             var date = DateTime.Now;
             //.GroupBy(x => new { x.Column1, x.Column2 })
-            
+
             var todayList = s.GetAllTodayRecords();
             s.ProcessOrdersByDate(todayList, date);
             s.ProcessCash(todayList, date);

@@ -1,5 +1,14 @@
 # StockXChallenge plan
 todo:
+1. we change the soa to one liner per account per stock date sorted.
+2. add email capability. 
+3. add windows task.
+4. move connection string to app config.
+5. back up the sdf. copy and rename to daily filename.
+6. ask techni for a client txt dump.
+7. back up uat server.
+
+todo: (done all)
 1. create a unit test for cash calculation. add at leat two stock codes to fully test it.
 2. create CashHistory table
 
