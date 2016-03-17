@@ -1,20 +1,58 @@
 # StockXChallenge plan
 todo:
+1. create a unit test for cash calculation. add at leat two stock codes to fully test it.
+2. create CashHistory table
+
+todo: (done all)
+1. get list of matchedorders for the day
+2. filter list per account and per stock
+3. Lookup cash for account before loop. 
+4. calculate amount (b is minus and s is plus)
+5. add to cash
+6. add cash to cashlist
+7. save cashlist
+8. make a backup of db as part of process.
+
+todo:
+1. create a unit test for cash calculation. add at leat two stock codes to fully test it.
+2. wrong calculation. 
+2.a first possible bug.  there is only one matched order for the account.
+2.b. the calculation doesn't add or subtract from cash
+2.c. inside the loop is getting not match date.  may or may not work:
+                    List<Cash> accountCashList = cashList.Where(o => o.AccountCode == matchedOrder.AccountCode && o.LastUpdatedDate != matchedOrder.MatchDate).ToList();
+					at least remove from loop so only one call.
+2.d. make this return only cash and not list.  do the list.add outside of the function.
+        private List<Cash> CalculateCash(List<MatchedOrder> matchedOrders)
+2.e. maybe remove cash processing outside of the loop of avg cost calculation
+2.f. saving the cash list updates the lastupdated date which bypasses the check and ignores the other stock.
+2.g save only when all stocks are processed.
+
+
+todo:
 1. create cash table: use correct columns
 1.a add dummy values
 2.a Get latest cash per account
-2.b add total portfolio value to cash (positive or negative).  Total portfolio is the sum of all last record per stock.
-2.b.b. total positions = sum of all stock's avgcost * net volume
-2.b.b.c cash = previous cash - current total positions
-2.c generate cash.txt with this format OT3530-2;4440.13;.0000;4440.13
-3. 
+3. Look for each stock per account and find out if net selling, if yes, then add the net price (pos or neg)
+4. Update cash position.
+5. generate cash.txt with this format OT3530-2;4440.13;.0000;4440.13
+ 
+ 
+ lookup cash using accountcode
+ loop thru matchedorder(every account transaction per stock)
+	if (BUY) ? CASH - (Price * Quantity) : CASH + (Price* Quantity)
 
 todo:
 1.get all records
 2.sort by account then by date
 3.write soa.txt file
-2.            //A00001-1;01/15/2016;SI-107149;Sale of DMC 100000 shares @ 12.1200 
+2.            //A00001-1;01/15/2016;SI-1  07149;Sale of DMC 100000 shares @ 12.1200 
             //A01618-0;12/29/2015;BI-175968;Purchase of MER 3260 shares @ 317.4000
+
+
+OUT RECEIPT NO. 32635 DATED 26 JAN. 2016 AND 
+2,400 SHARES OF AC, 55,000 SHARES OF ALI, 1,200 SHARES OF GTCAP, 1,800 SHARES OF SM 
+
+
 todo:done
 1. Let's create 3 accounts in table.  With different cases:
 2. Let's create a script that will get only the last record of the matched order per account per stock.  this step is right after all 

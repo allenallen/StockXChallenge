@@ -8,7 +8,7 @@ using System.IO;
 namespace UnitTestProject1
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTest
     {
         List<ClientAverageCost> list = new List<ClientAverageCost>();
         public List<ClientAverageCost> GetList()
@@ -45,6 +45,25 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void CalculateCashTest()
+        {
+            var s = new StockXDBController();
+            var date = new DateTime(2015, 07, 15, 23, 59, 59);
+            var todayList = s.GetAllRecordsByDate(date);
+            //foreach (var today in todayList)
+            //{
+            //    Console.WriteLine(today.AccountCode);
+            //}
+            var cash = s.CalculateCash("TEST12346", "7/15/2015", todayList);
+         
+            Assert.IsTrue(Math.Round(cash.Amount,2) == 991650.00M);
+
+            cash = s.CalculateCash("TEST12345", "7/15/2015", todayList);
+            Assert.IsTrue(Math.Round(cash.Amount, 2) == 1511930.00M);
+            //991650
+
+        }
+        [TestMethod]
         public void PoscostFileTest()
         {
             var s = new StockXDBController();
@@ -71,10 +90,10 @@ namespace UnitTestProject1
         {
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 15,23,0,0);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
+            List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12345", "TEST", baseDate);
            // list.Reverse();
-
-            List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
+            
+            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
             s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.20M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
@@ -87,10 +106,10 @@ namespace UnitTestProject1
         {
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 15, 23, 0, 0);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12346", "TEST", baseDate);
+            List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12346", "TEST", baseDate);
             //list.Reverse();
 
-            List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
+            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
             s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.45M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 1.45m);
@@ -103,10 +122,11 @@ namespace UnitTestProject1
         {
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 1);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
+            List<MatchedOrder> list = s.GetMatchedOrdersByAccountCodeAndStockCodeByDate("TEST12345", "TEST", baseDate);
             //list.Reverse();
-
-            List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
+            s.HandleLastRecord("TEST12345", "TEST", baseDate,list);
+            
+            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
             s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.2M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
@@ -119,10 +139,10 @@ namespace UnitTestProject1
         {
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 6, 30);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
-            list.Reverse();
+            List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12345", "TEST", baseDate);
+            //list.Reverse();
 
-            List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
+            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
             s.CalculateAvgCost(list,clientList);
             Assert.IsTrue(Math.Round(clientList[0].AverageCost.Value, 4) == 1.20M);
             Assert.IsTrue(clientList[1].AverageCost.Value == 0);
@@ -130,11 +150,13 @@ namespace UnitTestProject1
             Assert.IsTrue(clientList[1].NetVolume == 0);
         }
 
+
         [TestMethod]
         public void TestDBFirstNotEqualsLastRecordAndBuySellCurrentDay()
         {
+            //todo: temp code for DateTime.Now
             var s = new StockXDBController();
-            var lastList = s.GetFirstAndLastRecord("TEST12347", "TEST");
+            var lastRecord = s.GetLastRecord("TEST12347", "TEST", DateTime.Now);
 
 
 
@@ -168,10 +190,10 @@ namespace UnitTestProject1
             };
             currentList.Add(current);
 
-            if (lastList.Count != 0)
+            if (lastRecord != null)
             {
                 currentList.Reverse();
-                currentList.Add(lastList[0]);
+                currentList.Add(lastRecord);
                 currentList.Reverse();
                 //perform a first buy operation
                 //create an empty record
@@ -179,7 +201,7 @@ namespace UnitTestProject1
             //currentList = currentList.OrderBy(o => o.OrderDatetime).ToList();
 
             //s.CheckFirstAndLastRecord(currentList);
-            List<ClientAverageCost> cList = s.TransformMatchedOrder(currentList);
+            List<ClientAverageCost> cList = s.TransformMatchedOrderToClientAverageCostList(currentList);
             s.CalculateAvgCost(currentList,cList);
             Assert.IsTrue(cList[1].SumOfNetPrice == 25500M);
             Assert.IsTrue(cList[1].AverageCost == 5.1M);
@@ -484,7 +506,7 @@ namespace UnitTestProject1
                 currentQuery.Reverse();
             }
 
-            var list = sControl.TransformMatchedOrder(currentQuery);
+            var list = sControl.TransformMatchedOrderToClientAverageCostList(currentQuery);
             sControl.CalculateAvgCost(list);
             Assert.IsTrue(list[1].AverageCost == 2.75M);
             Assert.IsTrue(list[1].SumOfNetPrice == 2750M);
@@ -522,7 +544,7 @@ namespace UnitTestProject1
                 currentQuery.Add(firstAndLast[1]);
             }
 
-            var list = sControl.TransformMatchedOrder(currentQuery);
+            var list = sControl.TransformMatchedOrderToClientAverageCostList(currentQuery);
             sControl.CalculateAvgCost(list);
             Assert.IsTrue(list[0].AverageCost == 2.5M);
             Assert.IsTrue(list[0].SumOfNetPrice == 2500M);

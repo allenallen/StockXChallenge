@@ -1,4 +1,3 @@
-C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\StockXDataBase.sdf
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\UnitTestProject1.dll.config
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\UnitTestProject1.dll
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\UnitTestProject1\bin\Debug\UnitTestProject1.pdb

@@ -5,15 +5,36 @@ using System.Text;
 using System.Threading.Tasks;
 using PortfolioController;
 using System.Data.SqlClient;
+using System.Data.SqlServerCe;
 
 namespace StockXChallenge
 {
     class Program
     {
 
+        static void TestCash(string[] args)
+        {
+            var s = new StockXDBController();
+            var date = new DateTime(2016,3,15,23,59,59);
+            //.GroupBy(x => new { x.Column1, x.Column2 })
+
+            var todayList = s.GetAllRecordsByDate(date);
+            //foreach (var today in todayList)
+            //{
+            //    Console.WriteLine("acct:{0},stock:{1}", today.AccountCode,today.StockCode);
+            //}
+            //s.ProcessOrders(todayList, date);
+            s.ProcessCash(todayList, date);
+            s.GenerateCash(date);
+
+
+        }
         static void Run(string[] args)
         {
+            //call it here
             GetFilledOrdersFromTechni();
+
+            //calculate average costs and cash
             ProcessOrdersFromTechni(args);
 
         }
@@ -24,7 +45,19 @@ namespace StockXChallenge
             s.SaveNewListToDB(list);
             Console.WriteLine("Done saving filled orders from Techni.");
         }
-
+        static void CheckDB(string[] args)
+        {
+            using (SqlCeEngine engine = new SqlCeEngine())
+            {//@"Data Source = C:\apps\StockXDataBase.sdf");
+                
+                engine.LocalConnectionString = @"Data Source = C:\apps\StockXDataBase.sdf";
+                if (false == engine.Verify())
+                {
+                    Console.WriteLine("Database is corrupted.");
+                    engine.Repair(null, RepairOption.RecoverAllPossibleRows);
+                }
+            };
+        }
         static void ProcessAll(string[] args)
         {
             var s = new StockXDBController();
@@ -38,7 +71,7 @@ namespace StockXChallenge
                 Console.WriteLine(o.OrderDatetime);
 
             }
-            s.ProcessOrders(todayList,date);
+            s.ProcessAllOrdersByDate(todayList,date);
 
             s.GeneratePosCost(date);
             
@@ -47,7 +80,14 @@ namespace StockXChallenge
         }
         static void Main(string[] args)
         {
+            //CheckDB(args);
             Run(args);
+            //testCashUnit(args);
+            Console.ReadKey();
+        }
+        static void testCashUnit(string[] args)
+        {
+
         }
         static void Main555(string[] args)
         {
@@ -60,76 +100,76 @@ namespace StockXChallenge
             //.GroupBy(x => new { x.Column1, x.Column2 })
             
             var todayList = s.GetAllTodayRecords();
-            s.ProcessOrders(todayList,date);
-
+            s.ProcessOrdersByDate(todayList, date);
+            s.ProcessCash(todayList, date);
             s.GeneratePosCost(date);
             s.GenerateSOA(date);
+            s.GenerateCash(date);
             Console.WriteLine("Finished Processing orders from Techni. Hit any key");
-            Console.ReadKey();
         }
-        static void B(string[] args)
-        {
-            var s = new StockXDBController();
-            var lastList = s.GetFirstAndLastRecord("TEST12347", "TEST");
+        //static void B(string[] args)
+        //{
+        //    var s = new StockXDBController();
+        //    var lastList = s.GetLastRecord("TEST12347", "TEST");
 
 
 
-            MatchedOrder current = new MatchedOrder()
-            {
-                AccountCode = "TEST12347",
-                UserId = "TESTACCOUNT",
-                MatchedOrderID = 5,
-                OrderDatetime = new DateTime(2025, 6, 1, 6, 0, 0),
-                Side = "BUY",
-                StockCode = "TEST",
-                BoardLot = "MAIN",
-                MatchDate = "06/01/2025",
-                Price = 8.0M,
-                Quantity = 2000
-            };
-            List<MatchedOrder> currentList = new List<MatchedOrder>();
-            currentList.Add(current);
-            current = new MatchedOrder()
-            {
-                AccountCode = "TEST12347",
-                UserId = "TESTACCOUNT",
-                MatchedOrderID = 6,
-                OrderDatetime = new DateTime(2025, 6, 1, 10, 0, 0),
-                Side = "SELL",
-                StockCode = "TEST",
-                BoardLot = "MAIN",
-                MatchDate = "06/01/2025",
-                Price = 25.0M,
-                Quantity = 3000
-            };
-            currentList.Add(current);
+        //    MatchedOrder current = new MatchedOrder()
+        //    {
+        //        AccountCode = "TEST12347",
+        //        UserId = "TESTACCOUNT",
+        //        MatchedOrderID = 5,
+        //        OrderDatetime = new DateTime(2025, 6, 1, 6, 0, 0),
+        //        Side = "BUY",
+        //        StockCode = "TEST",
+        //        BoardLot = "MAIN",
+        //        MatchDate = "06/01/2025",
+        //        Price = 8.0M,
+        //        Quantity = 2000
+        //    };
+        //    List<MatchedOrder> currentList = new List<MatchedOrder>();
+        //    currentList.Add(current);
+        //    current = new MatchedOrder()
+        //    {
+        //        AccountCode = "TEST12347",
+        //        UserId = "TESTACCOUNT",
+        //        MatchedOrderID = 6,
+        //        OrderDatetime = new DateTime(2025, 6, 1, 10, 0, 0),
+        //        Side = "SELL",
+        //        StockCode = "TEST",
+        //        BoardLot = "MAIN",
+        //        MatchDate = "06/01/2025",
+        //        Price = 25.0M,
+        //        Quantity = 3000
+        //    };
+        //    currentList.Add(current);
 
-            if (lastList.Count != 0)
-            {
-                currentList.Reverse();
-                currentList.Add(lastList[0]);
-                currentList.Reverse();
-                //perform a first buy operation
-                //create an empty record
-            }
-            //currentList = currentList.OrderBy(o => o.OrderDatetime).ToList();
+        //    if (lastList.Count != 0)
+        //    {
+        //        currentList.Reverse();
+        //        currentList.Add(lastList[0]);
+        //        currentList.Reverse();
+        //        //perform a first buy operation
+        //        //create an empty record
+        //    }
+        //    //currentList = currentList.OrderBy(o => o.OrderDatetime).ToList();
 
-            //s.CheckFirstAndLastRecord(currentList);
-            List<ClientAverageCost> cList = s.TransformMatchedOrder(currentList);
-            s.CalculateAvgCost(currentList, cList);
+        //    //s.CheckFirstAndLastRecord(currentList);
+        //    List<ClientAverageCost> cList = s.TransformMatchedOrderToClientAverageCostList(currentList);
+        //    s.CalculateAvgCost(currentList, cList);
 
-            foreach (var c in cList)
-            {
-                Console.WriteLine("Date: {0}", c.Date);
-                Console.WriteLine("Side: ", c.Side);
-                Console.WriteLine("AvgCost: {0}", c.AverageCost);
-                Console.WriteLine("SumPrice: {0}", c.SumOfNetPrice);
-                Console.WriteLine("Netvolume: {0}", c.NetVolume);
-                Console.WriteLine("BuyPrice: {0}", c.BuyPrice);
-                Console.WriteLine("--");
-            }
-            Console.ReadKey();
-        }
+        //    foreach (var c in cList)
+        //    {
+        //        Console.WriteLine("Date: {0}", c.Date);
+        //        Console.WriteLine("Side: ", c.Side);
+        //        Console.WriteLine("AvgCost: {0}", c.AverageCost);
+        //        Console.WriteLine("SumPrice: {0}", c.SumOfNetPrice);
+        //        Console.WriteLine("Netvolume: {0}", c.NetVolume);
+        //        Console.WriteLine("BuyPrice: {0}", c.BuyPrice);
+        //        Console.WriteLine("--");
+        //    }
+        //    Console.ReadKey();
+        //}
         static void Main6(string[] args)
         {
             MatchedOrder first = new MatchedOrder()
@@ -194,7 +234,7 @@ namespace StockXChallenge
                 currentQuery.Reverse();
             }
 
-            var list = sControl.TransformMatchedOrder(currentQuery);
+            var list = sControl.TransformMatchedOrderToClientAverageCostList(currentQuery);
             sControl.CalculateAvgCost(currentQuery,list);
             Console.WriteLine(list[1].AverageCost);
             Console.WriteLine(list[1].SumOfNetPrice);
@@ -205,11 +245,11 @@ namespace StockXChallenge
         {
             var s = new StockXDBController();
             DateTime baseDate = new DateTime(2015, 7, 16,23,0,0);
-            List<MatchedOrder> list = s.GetMatchedOrders("TEST12348", "TEST",baseDate);
-            List<MatchedOrder> firstAndLast = s.GetFirstAndLastRecord("TEST12348", "TEST");
+            List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12348", "TEST",baseDate);
+            var firstAndLast = s.GetLastRecord("TEST12348", "TEST", baseDate);
             list.Reverse();
 
-            List<ClientAverageCost> clientList = s.TransformMatchedOrder(list);
+            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
 
             Console.WriteLine("MatchedOrder List");
             Console.WriteLine("-----------------------");
@@ -270,7 +310,7 @@ namespace StockXChallenge
             s.SaveToDB(list);
 
 
-            List<MatchedOrder> newlist = s.GetMatchedOrders("TEST12345", "TEST", baseDate);
+            List<MatchedOrder> newlist = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12345", "TEST", baseDate);
 
             foreach (MatchedOrder item in newlist)
             {

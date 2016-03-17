@@ -1,5 +1,4 @@
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\StockXChallenge.exe.config
-C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\StockXDataBase.sdf
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\StockXChallenge.exe
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\StockXChallenge.pdb
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\EntityFramework.dll
@@ -9,3 +8,4 @@ C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallen
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\obj\Debug\StockXChallenge.csprojResolveAssemblyReference.cache
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\obj\Debug\StockXChallenge.exe
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\obj\Debug\StockXChallenge.pdb
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\System.Data.SqlServerCe.dll

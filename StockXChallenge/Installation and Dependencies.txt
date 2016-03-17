@@ -1,0 +1,2 @@
+﻿1. install SSCERuntime_x64-ENU or SSCERuntime-ENU
+2. add reference to System.Data.SqlServerCe
