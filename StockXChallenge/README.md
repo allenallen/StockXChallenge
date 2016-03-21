@@ -1,12 +1,40 @@
 # StockXChallenge plan
+
+todo: 
+important:  filter test account codes when generating clients.txt, pledge.txt, soa.txt
+Leaderboard:
+            //get clients.
+            // get matched orders per client
+            // add/remove stocks in portfolio per client
+            // udpate price of stock
+            //calculate the equity
+            // get cash per client
+            //calculate leader board.  cash + equity
+            //insert leader if new then update if existing
+
+bb. create Portfolio table
+	a. PortfolioId, AccountCode, StockCode, Shares, MarketValue (we might have to use our own way of download market value), Date
+	b. remove sold stocks portfolio table
+	c. add bought stocks 
+
+
 todo:
 1. create client.txt from cash (good)
 format:
 account, name, address, phone, commission, N, C,5, 11011205464539
 OT9521-7;MARCO N. ACCAD;Unit 406 Danube Bldg., Riverfront Residences Caniogan, Pasig 1606 ;(0917)862-8504 631-8734;0.0025;N;C;5;11011205464539
 
-1. create pledge.txt from client.txt
+1. create pledge.txt from clients.txt
 1. Leaderboard:
+a.a.a Loop thru Portfolio table distinct stock codes.  Call getPrice from a third party dll. Put it in a hash table
+a.a.a.1 The loop thru every record of the portfolio, lookup stock current price via hash table. then update each row's stock price
+aa. create Leaderboard table
+cc. leaderboard 
+	a1. (create unit test) 
+	a. Delete both leaderboard
+	b. calculate score by looping thru portfolio using account code getting sum of product of shares and market value.
+	c. Save score 
+	d. Generate portfolio.txt file
 a. Get All stockx challenger participants. (possible all accounts that is in cash table)
 b. then we compute the cash + equity = 
   sum of all stocks owned (get current closing price) * volume per account

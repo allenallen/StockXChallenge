@@ -48,11 +48,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="COMClassLibrary">
+      <HintPath>..\..\..\..\..\Downloads\COMClassLibrary\COMClassLibrary\bin\Debug\COMClassLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="EmailLibrary">
       <HintPath>..\..\EmailLibrary\EmailLibrary\bin\Debug\EmailLibrary.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\Downloads\COMClassLibrary\COMClassLibrary\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PortfolioController, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Portfolio\PortfolioController\bin\Debug\PortfolioController.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -115,13 +125,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Portfolio\PortfolioController\PortfolioController.csproj">
-      <Project>{52412994-29da-4151-9595-6e48303dfd6c}</Project>
-      <Name>PortfolioController %28PortfolioController\PortfolioController%29</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Installation and Dependencies.txt" />
+    <Content Include="deploymentplan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

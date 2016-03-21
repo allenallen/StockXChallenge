@@ -1,0 +1,20 @@
+﻿Deployment Plan
+todo:
+Leaderboard:
+create a cms page for leaderboard in our cms inside fami.
+generate output file for leaderboard
+
+todo:
+copy files to server: use robocopy. get script from Mark
+back up text files to a shared drive (robocopy)
+create windows task in 10.11.18.23
+run stockxchallenge
+add to batch file with >> stockx.log
+run ssis script (dtexec /f E:\test_package\test_package\Package.dtsx /set \package.variables[id];1
+)
+configure odbc to make sure it is pointing to 10.11.18.21 (make sure)
+create script that could perform dns checks to make sure server configuration is correct
+add to batch file with >> ssis.log
+run robocopy to copy files: stockx.log, ssis.log to emailsent folder
+run email and add to attachments: stockx.log, ssis.log
+receipients: it@firstmetrosec.com.ph

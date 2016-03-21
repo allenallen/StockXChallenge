@@ -11,6 +11,33 @@ namespace UnitTestProject1
     public class UnitTest
     {
         List<ClientAverageCost> list = new List<ClientAverageCost>();
+
+        [TestMethod]
+        public void LeaderBoardTest()
+        {
+            var s = new StockXDBController();
+            Client client = new Client {AccountCode="TEST12345", InitialCapital=1000000};
+            List<Client> clients = new List<Client>();
+            clients.Add(client);
+            List<Leaderboard> list = LeaderBoardManager.GetLeaders(clients);
+            Assert.IsTrue(list[0].Capital == 1000000);
+            Assert.IsTrue(list[0].PnL == 0.00309);
+        }
+
+        [TestMethod]
+        public void PortfolioTest()
+        {
+            var s = new StockXDBController();
+            Client client = new Client { AccountCode = "TEST12345", Name = "test1" };
+            List<MatchedOrder> matchedOrders = s.GetMatchedOrdersByAccountCode(client.AccountCode, DateTime.Now);
+            s.UpdatePortfolio(matchedOrders);
+
+            List<Portfolio> testPortfolio = s.GetPortfolioRecordsByAccountcode(client.AccountCode);
+            Assert.IsTrue(testPortfolio.Count == 1);
+            Assert.IsTrue(testPortfolio[0].StockCode == "TEST");
+            Assert.IsTrue(testPortfolio[0].Shares == 19000);
+        }
+
         public List<ClientAverageCost> GetList()
         {
             ClientAverageCost c = new ClientAverageCost()
@@ -58,8 +85,8 @@ namespace UnitTestProject1
          
             Assert.IsTrue(Math.Round(cash.Amount,2) == 991650.00M);
 
-            cash = s.CalculateCash("TEST12345", "7/15/2015", todayList);
-            Assert.IsTrue(Math.Round(cash.Amount, 2) == 1511930.00M);
+            //cash = s.CalculateCash("TEST12345", "7/15/2015", todayList);
+            //Assert.IsTrue(Math.Round(cash.Amount, 2) == 1511930.00M);
             //991650
 
         }

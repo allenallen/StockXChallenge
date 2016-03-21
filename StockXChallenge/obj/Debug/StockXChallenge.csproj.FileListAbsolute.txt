@@ -12,3 +12,10 @@ C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallen
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\EmailLibrary.dll
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\EmailLibrary.pdb
 C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\App.config
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\COMClassLibrary.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\Newtonsoft.Json.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\EmailLib.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\MathNet.Numerics.dll
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\COMClassLibrary.pdb
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\Newtonsoft.Json.xml
+C:\Users\OJT\Documents\Visual Studio 2012\Projects\StockXChallenge\StockXChallenge\bin\Debug\EmailLib.pdb

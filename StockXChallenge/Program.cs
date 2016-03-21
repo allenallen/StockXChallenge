@@ -29,6 +29,76 @@ namespace StockXChallenge
 
 
         }
+
+        static void ProcessClients(string[] args)
+        {
+
+            var list = ClientManager.GetAllClients();
+            ClientManager.GenerateClients(list);
+
+
+        }
+
+        static void ProcessPledge(string[] args)
+        {
+
+            var list = ClientManager.GetAllClients();
+            PledgeManager.GeneratePledge(list);
+
+
+        }
+
+        static void RunWithLeadersAndPortfolio(string[] args)
+        {
+            ProcessClients(args);
+            ProcessPledge(args);
+            //ProcessPortfolio(args);
+            //ProcessLeaders(args);
+
+        }
+
+        private static void ProcessLeaders(string[] args)
+        {
+            var s = new StockXDBController();
+            var leaders = s.GetLeaders();
+            s.SaveLeaderList(leaders);
+        }
+
+        private static void ProcessPortfolio(string[] args)
+        {
+            var s = new StockXDBController();
+            var clients = ClientManager.GetAllClients();
+            foreach (var client in clients)
+            {
+                var matchedOrders = s.GetMatchedOrdersByAccountCode(client.AccountCode, DateTime.Now);
+                s.UpdatePortfolio(matchedOrders);
+            }
+            using (var dbContext = new StockXDataBaseEntities())
+            {
+                List<string> stocks = (from entry in dbContext.Portfolios
+                              select entry.StockCode).Distinct().ToList();
+                Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
+                foreach (var item in updatedClosingPrices)
+                {
+                    Console.WriteLine("Current closing price {0}: {1}",item.Key,item.Value);
+                }
+                s.UpdatePortfolioPrices(dbContext, updatedClosingPrices);
+                dbContext.SaveChanges();
+            }
+           
+            //get clients.
+            // get matched orders per client
+            // add/remove stocks in portfolio per client
+            // udpate price of stock
+            
+
+            //List<Leaderboard> list = LeaderBoardManager.GetLeaders();
+            //foreach (var i in list)
+            //{
+            //    Console.WriteLine("Account:{1}, PnL{0}", i.PnL, i.AccountCode);
+            //}
+            
+        }
         static void Run(string[] args)
         {
             //call it here
@@ -39,6 +109,8 @@ namespace StockXChallenge
             //calculate average costs and cash
             ProcessOrdersFromTechni(args);
 
+            ProcessClients(args);
+            ProcessPledge(args);
         }
 
         private static void Backup()
