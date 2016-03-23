@@ -1,6 +1,16 @@
 # StockXChallenge plan
+todo: 3/23/2016
+1. sell half of positions of both jerv and christine done
+2. add more stocks.  done
+3. We launch SSIS via command line.
+4. We add to windows task the SSIS.
+5. Let's create a monitoring system that will tell us if our services our running properly.  Including reading log files that are generated.
+5.a for example. send us the log when we start SSIS w/o any error.
+5.b. a mindset on the operation and maintenance of the app.
+6. test case for zero out stocks in portfolio when selling. done
+7. work with erika to find out how to generate soa
 
-todo: 
+todo: DONE
 important:  filter test account codes when generating clients.txt, pledge.txt, soa.txt
 Leaderboard:
             //get clients.

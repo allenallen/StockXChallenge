@@ -1,0 +1,8 @@
+Test Script
+1. Buy at least 3 new stocks
+2. Buy 1 existing stock
+3. Sell half of positions on one existing stock
+4. Sell all position on on existing stock
+5. Run stockx
+6. SSIS.
+7. View each account if changes were made. Check number of shares, actual stocks

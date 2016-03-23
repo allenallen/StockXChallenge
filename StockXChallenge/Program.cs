@@ -64,7 +64,7 @@ namespace StockXChallenge
             s.SaveLeaderList(leaders);
         }
 
-        private static void ProcessPortfolio(string[] args)
+        private static void ProcessPortfolioOld(string[] args)
         {
             var s = new StockXDBController();
             var clients = ClientManager.GetAllClients();
@@ -75,7 +75,7 @@ namespace StockXChallenge
             }
             using (var dbContext = new StockXDataBaseEntities())
             {
-                List<string> stocks = (from entry in dbContext.Portfolios
+                List<string> stocks = (from entry in dbContext.Portfolio
                               select entry.StockCode).Distinct().ToList();
                 Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
                 foreach (var item in updatedClosingPrices)
@@ -103,15 +103,25 @@ namespace StockXChallenge
         {
             //call it here
 
-            Backup();
-            GetFilledOrdersFromTechni();
-
+            //Backup();
+            //GetFilledOrdersFromTechni();
+            DateTime date = DateTime.Now;
             //calculate average costs and cash
             ProcessOrdersFromTechni(args);
-
+            ProcessPortfolio(date);
             ProcessClients(args);
             ProcessPledge(args);
         }
+
+        //private static void ProcessPortfolio()
+        //{
+        //    var s = new StockXDBController();
+        //    using(var dbContext = new StockXDataBaseEntities())
+        //    {
+        //        var list = s.GetAllRecords();
+        //        s.UpdatePortfolio(list);
+        //    }
+        //}
 
         private static void Backup()
         {
@@ -165,18 +175,34 @@ namespace StockXChallenge
             Console.WriteLine("Hit any key");
             Console.ReadKey();
         }
+        static void ProcessPortfolio(DateTime date)
+        {
+            var s = new StockXDBController();
+            var allRecords = s.GetAllRecords();
+            var matchedOrderClients = allRecords.Select(o => o.AccountCode).Distinct().ToList();
+            foreach(var client in matchedOrderClients)
+            {
+                var matchedOrders = s.GetMatchedOrdersByAccountCode(client,date);
+                s.UpdatePortfolio(matchedOrders);
+            }
+            //ProcessPortfolio();
+            s.GeneratePosCost(DateTime.Now);
+        }
+        static void Mainx(string[] args)
+        {
+            string x = "10111199999";
+            int five = 15;
+            x = x + five.ToString().PadLeft(3, '0');
+            Console.WriteLine( x);
+            Console.ReadKey();
+        }
         static void Main(string[] args)
         {
             
             //CheckDB(args);
             Run(args);
             //testCashUnit(args);
-            
             Console.ReadKey();
-        }
-        static void testCashUnit(string[] args)
-        {
-
         }
         static void Main555(string[] args)
         {
@@ -191,6 +217,7 @@ namespace StockXChallenge
             var todayList = s.GetAllTodayRecords();
             s.ProcessOrdersByDate(todayList, date);
             s.ProcessCash(todayList, date);
+            //ProcessPortfolio();
             s.GeneratePosCost(date);
             s.GenerateSOA(date);
             s.GenerateCash(date);

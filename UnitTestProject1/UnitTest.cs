@@ -38,6 +38,44 @@ namespace UnitTestProject1
             Assert.IsTrue(testPortfolio[0].Shares == 19000);
         }
 
+        [TestMethod]
+        public void PortfolioZeroOutTest()
+        {
+            var s = new StockXDBController();
+            Client client = new Client { AccountCode = "TEST12345", Name = "test1" };
+
+            MatchedOrder sellAllStocks = new MatchedOrder
+            {
+                UserId = "test1",
+                Side = "S",
+                Quantity = 19000,
+                Price = 20.0M,
+                OrderDatetime = DateTime.Now.AddDays(-1),
+                MatchDate = DateTime.Now.AddDays(-1).ToShortDateString(),
+                BoardLot = "TESTZERO",
+                AccountCode = client.AccountCode,
+                StockCode = "TEST"
+            };
+
+            List<MatchedOrder> addToTable = new List<MatchedOrder>();
+            addToTable.Add(sellAllStocks);
+
+            s.SaveNewListToDB(addToTable);
+
+            List<MatchedOrder> matchedOrders = s.GetMatchedOrdersByAccountCode(client.AccountCode, DateTime.Now);
+
+            s.UpdatePortfolio(matchedOrders);
+
+            List<Portfolio> testPortfolio = s.GetPortfolioRecordsByAccountcode(client.AccountCode);
+            Assert.IsTrue(testPortfolio.Count == 0);
+            //Assert.IsTrue(testPortfolio[0].StockCode == "TEST");
+            //Assert.IsTrue(testPortfolio[0].Shares == 19000);
+
+            s.RemoveFromMatchedOrdersTable(sellAllStocks);
+        }
+
+        
+
         public List<ClientAverageCost> GetList()
         {
             ClientAverageCost c = new ClientAverageCost()

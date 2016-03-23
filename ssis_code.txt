@@ -1,0 +1,66 @@
+DELETE FROM tbl_tempaccounts
+
+      ,[name]
+      ,[FirstName]
+      ,[LastName]
+      ,[phone]
+      ,[busphone]
+      ,[Address]
+      ,[PCFlag]
+      ,[TypeFlag]
+      ,[CommRate]
+      ,[Cash]
+      ,[Onlinetrading]
+      ,[trader]
+      ,[XchgAccountCode]
+      ,[Email]
+      ,[ViolationAction]
+      ,[AccountStatus]
+      ,[OnlineID]
+
+
+
+ FXproc_SSIS_UpdateAccounts
+
+
+DELETE FROM tbl_tempaccountbalance
+
+
+tbl_tempaccountbalance
+
+      ,[Cash]
+      ,[AdditionalLimit]
+      ,[DateUpdated]
+      ,[Withdrawable]
+      ,[SettlementBank]
+      ,[SettlementBranch]
+      ,[SettlementAccount]
+      ,[MaximumMargin]
+      ,[Secondarybank]
+      ,[Secondarybranch]
+      ,[Secondaryaccount]
+
+
+exec FXproc_SSIS_UpdateBalance
+
+ FXproc_SSIS_UpdateWithdrawable
+
+
+
+
+DELETE from FxaccountInventoryDetails
+DELETE from FxaccountInventory
+
+FXproc_SSIS_FxaccountInventory
+
+
+
+DELETE FROM tbl_SOA
+
+import to tbl_SOA
+
+
+TBL_TempPledges
+
+PledgeIN
+
