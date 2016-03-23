@@ -11,118 +11,42 @@ namespace StockXChallenge
 {
     class Program
     {
-
-        static void TestCash(string[] args)
+        static void ProcessClients()
         {
-            var s = new StockXDBController();
-            var date = new DateTime(2016,3,15,23,59,59);
-            //.GroupBy(x => new { x.Column1, x.Column2 })
-
-            var todayList = s.GetAllRecordsByDate(date);
-            //foreach (var today in todayList)
-            //{
-            //    Console.WriteLine("acct:{0},stock:{1}", today.AccountCode,today.StockCode);
-            //}
-            //s.ProcessOrders(todayList, date);
-            s.ProcessCash(todayList, date);
-            s.GenerateCash(date);
-
-
-        }
-
-        static void ProcessClients(string[] args)
-        {
-
             var list = ClientManager.GetAllClients();
             ClientManager.GenerateClients(list);
-
-
         }
 
-        static void ProcessPledge(string[] args)
+        static void ProcessPledge()
         {
-
             var list = ClientManager.GetAllClients();
             PledgeManager.GeneratePledge(list);
-
-
         }
 
-        static void RunWithLeadersAndPortfolio(string[] args)
-        {
-            ProcessClients(args);
-            ProcessPledge(args);
-            //ProcessPortfolio(args);
-            //ProcessLeaders(args);
-
-        }
-
-        private static void ProcessLeaders(string[] args)
+       
+        private static void ProcessLeaders()
         {
             var s = new StockXDBController();
             var leaders = s.GetLeaders();
-            s.SaveLeaderList(leaders);
-        }
-
-        private static void ProcessPortfolioOld(string[] args)
-        {
-            var s = new StockXDBController();
-            var clients = ClientManager.GetAllClients();
-            foreach (var client in clients)
-            {
-                var matchedOrders = s.GetMatchedOrdersByAccountCode(client.AccountCode, DateTime.Now);
-                s.UpdatePortfolio(matchedOrders);
-            }
-            using (var dbContext = new StockXDataBaseEntities())
-            {
-                List<string> stocks = (from entry in dbContext.Portfolio
-                              select entry.StockCode).Distinct().ToList();
-                Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
-                foreach (var item in updatedClosingPrices)
-                {
-                    Console.WriteLine("Current closing price {0}: {1}",item.Key,item.Value);
-                }
-                s.UpdatePortfolioPrices(dbContext, updatedClosingPrices);
-                dbContext.SaveChanges();
-            }
+            s.SaveLeaderListAndGenerateFile(leaders);
            
-            //get clients.
-            // get matched orders per client
-            // add/remove stocks in portfolio per client
-            // udpate price of stock
-            
-
-            //List<Leaderboard> list = LeaderBoardManager.GetLeaders();
-            //foreach (var i in list)
-            //{
-            //    Console.WriteLine("Account:{1}, PnL{0}", i.PnL, i.AccountCode);
-            //}
-            
         }
-        static void Run(string[] args)
+
+        
+        static void Run(DateTime date)
         {
             //call it here
 
             //Backup();
-            //GetFilledOrdersFromTechni();
-            DateTime date = DateTime.Now;
+            GetFilledOrdersFromTechni();
+            
             //calculate average costs and cash
-            ProcessOrdersFromTechni(args);
+            ProcessOrdersFromTechni(date);
             ProcessPortfolio(date);
-            ProcessClients(args);
-            ProcessPledge(args);
+            ProcessClients();
+            ProcessPledge();
+            ProcessLeaders();
         }
-
-        //private static void ProcessPortfolio()
-        //{
-        //    var s = new StockXDBController();
-        //    using(var dbContext = new StockXDataBaseEntities())
-        //    {
-        //        var list = s.GetAllRecords();
-        //        s.UpdatePortfolio(list);
-        //    }
-        //}
-
         private static void Backup()
         {
             var s = new StockXDBController();
@@ -155,26 +79,7 @@ namespace StockXChallenge
                 }
             };
         }
-        static void ProcessAll(string[] args)
-        {
-            var s = new StockXDBController();
-            var date = new DateTime(2015,7,15);
-            //.GroupBy(x => new { x.Column1, x.Column2 })
-
-            var todayList = s.GetAllPreviousRecordsByDate(date);
-
-            foreach (MatchedOrder o in todayList)
-            {
-                Console.WriteLine(o.OrderDatetime);
-
-            }
-            s.ProcessAllOrdersByDate(todayList,date);
-
-            s.GeneratePosCost(date);
-            
-            Console.WriteLine("Hit any key");
-            Console.ReadKey();
-        }
+        
         static void ProcessPortfolio(DateTime date)
         {
             var s = new StockXDBController();
@@ -185,33 +90,34 @@ namespace StockXChallenge
                 var matchedOrders = s.GetMatchedOrdersByAccountCode(client,date);
                 s.UpdatePortfolio(matchedOrders);
             }
-            //ProcessPortfolio();
+            
+            using (var dbContext = new StockXDataBaseEntities())
+            {
+                List<string> stocks = (from entry in dbContext.Portfolio
+                                       select entry.StockCode).Distinct().ToList();
+                Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
+                foreach (var item in updatedClosingPrices)
+                {
+                    Console.WriteLine("Current closing price {0}: {1}", item.Key, item.Value);
+                }
+                s.UpdatePortfolioPrices(dbContext, updatedClosingPrices);
+                dbContext.SaveChanges();
+            }
+
             s.GeneratePosCost(DateTime.Now);
-        }
-        static void Mainx(string[] args)
-        {
-            string x = "10111199999";
-            int five = 15;
-            x = x + five.ToString().PadLeft(3, '0');
-            Console.WriteLine( x);
-            Console.ReadKey();
         }
         static void Main(string[] args)
         {
-            
+            DateTime date = DateTime.Now;
             //CheckDB(args);
-            Run(args);
+            Run(date);
             //testCashUnit(args);
-            Console.ReadKey();
+           // Console.ReadKey();
         }
-        static void Main555(string[] args)
-        {
-            ProcessAll(args);
-        }
-        static void ProcessOrdersFromTechni(string[] args)
+        static void ProcessOrdersFromTechni(DateTime date)
         {
             var s = new StockXDBController();
-            var date = DateTime.Now;
+            //var date = DateTime.Now;
             //.GroupBy(x => new { x.Column1, x.Column2 })
 
             var todayList = s.GetAllTodayRecords();
@@ -223,6 +129,96 @@ namespace StockXChallenge
             s.GenerateCash(date);
             Console.WriteLine("Finished Processing orders from Techni. Hit any key");
         }
+        //static void TestCash(string[] args)
+        //{
+        //    var s = new StockXDBController();
+        //    var date = new DateTime(2016, 3, 15, 23, 59, 59);
+        //    //.GroupBy(x => new { x.Column1, x.Column2 })
+
+        //    var todayList = s.GetAllRecordsByDate(date);
+        //    //foreach (var today in todayList)
+        //    //{
+        //    //    Console.WriteLine("acct:{0},stock:{1}", today.AccountCode,today.StockCode);
+        //    //}
+        //    //s.ProcessOrders(todayList, date);
+        //    s.ProcessCash(todayList, date);
+        //    s.GenerateCash(date);
+
+
+        //}
+
+        //static void RunWithLeadersAndPortfolio(string[] args)
+        //{
+        //    ProcessClients(args);
+        //    ProcessPledge(args);
+        //    //ProcessPortfolio(args);
+        //    //ProcessLeaders(args);
+
+        //}
+
+        //private static void ProcessPortfolioOld(string[] args)
+        //{
+        //    var s = new StockXDBController();
+        //    var clients = ClientManager.GetAllClients();
+        //    foreach (var client in clients)
+        //    {
+        //        var matchedOrders = s.GetMatchedOrdersByAccountCode(client.AccountCode, DateTime.Now);
+        //        s.UpdatePortfolio(matchedOrders);
+        //    }
+        //    using (var dbContext = new StockXDataBaseEntities())
+        //    {
+        //        List<string> stocks = (from entry in dbContext.Portfolio
+        //                               select entry.StockCode).Distinct().ToList();
+        //        Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
+        //        foreach (var item in updatedClosingPrices)
+        //        {
+        //            Console.WriteLine("Current closing price {0}: {1}", item.Key, item.Value);
+        //        }
+        //        s.UpdatePortfolioPrices(dbContext, updatedClosingPrices);
+        //        dbContext.SaveChanges();
+        //    }
+
+        //    //get clients.
+        //    // get matched orders per client
+        //    // add/remove stocks in portfolio per client
+        //    // udpate price of stock
+
+
+        //    //List<Leaderboard> list = LeaderBoardManager.GetLeaders();
+        //    //foreach (var i in list)
+        //    //{
+        //    //    Console.WriteLine("Account:{1}, PnL{0}", i.PnL, i.AccountCode);
+        //    //}
+
+        //}
+        //static void ProcessAll(string[] args)
+        //{
+        //    var s = new StockXDBController();
+        //    var date = new DateTime(2015, 7, 15);
+        //    //.GroupBy(x => new { x.Column1, x.Column2 })
+
+        //    var todayList = s.GetAllPreviousRecordsByDate(date);
+
+        //    foreach (MatchedOrder o in todayList)
+        //    {
+        //        Console.WriteLine(o.OrderDatetime);
+
+        //    }
+        //    s.ProcessAllOrdersByDate(todayList, date);
+
+        //    s.GeneratePosCost(date);
+
+        //    Console.WriteLine("Hit any key");
+        //    Console.ReadKey();
+        //}
+        //static void Mainx(string[] args)
+        //{
+        //    string x = "10111199999";
+        //    int five = 15;
+        //    x = x + five.ToString().PadLeft(3, '0');
+        //    Console.WriteLine(x);
+        //    Console.ReadKey();
+        //}
         //static void B(string[] args)
         //{
         //    var s = new StockXDBController();
@@ -286,168 +282,168 @@ namespace StockXChallenge
         //    }
         //    Console.ReadKey();
         //}
-        static void Main6(string[] args)
-        {
-            MatchedOrder first = new MatchedOrder()
-            {
-                AccountCode = "TEST12345",
-                UserId = "TESTACCOUNT",
-                MatchedOrderID = 1,
-                OrderDatetime = new DateTime(2015, 6, 1),
-                Side = "BUY",
-                StockCode = "TEST",
-                BoardLot = "MAIN",
-                MatchDate = "06/01/2015",
-                Price = 2.5M,
-                Quantity = 1000,
-                NetPrice = 2500M,
-                SumOfNetPrice = 2500M,
-                NetVolume = 1000,
-                AvgCost = 2.5M
-            };
-            MatchedOrder last = new MatchedOrder()
-            {
-                AccountCode = "TEST12345",
-                UserId = "TESTACCOUNT",
-                MatchedOrderID = 1,
-                OrderDatetime = new DateTime(2015, 6, 2),
-                Side = "BUY",
-                StockCode = "TEST",
-                BoardLot = "MAIN",
-                MatchDate = "06/02/2015",
-                Price = 3.0M,
-                Quantity = 1000,
-                NetPrice = 3000M,
-                SumOfNetPrice = 5500M,
-                NetVolume = 2000,
-                AvgCost = 2.75M
-            };
-            List<MatchedOrder> firstAndLast = new List<MatchedOrder>();
-            firstAndLast.Add(first);
-            firstAndLast.Add(last);
+        //static void Main6(string[] args)
+        //{
+        //    MatchedOrder first = new MatchedOrder()
+        //    {
+        //        AccountCode = "TEST12345",
+        //        UserId = "TESTACCOUNT",
+        //        MatchedOrderID = 1,
+        //        OrderDatetime = new DateTime(2015, 6, 1),
+        //        Side = "BUY",
+        //        StockCode = "TEST",
+        //        BoardLot = "MAIN",
+        //        MatchDate = "06/01/2015",
+        //        Price = 2.5M,
+        //        Quantity = 1000,
+        //        NetPrice = 2500M,
+        //        SumOfNetPrice = 2500M,
+        //        NetVolume = 1000,
+        //        AvgCost = 2.5M
+        //    };
+        //    MatchedOrder last = new MatchedOrder()
+        //    {
+        //        AccountCode = "TEST12345",
+        //        UserId = "TESTACCOUNT",
+        //        MatchedOrderID = 1,
+        //        OrderDatetime = new DateTime(2015, 6, 2),
+        //        Side = "BUY",
+        //        StockCode = "TEST",
+        //        BoardLot = "MAIN",
+        //        MatchDate = "06/02/2015",
+        //        Price = 3.0M,
+        //        Quantity = 1000,
+        //        NetPrice = 3000M,
+        //        SumOfNetPrice = 5500M,
+        //        NetVolume = 2000,
+        //        AvgCost = 2.75M
+        //    };
+        //    List<MatchedOrder> firstAndLast = new List<MatchedOrder>();
+        //    firstAndLast.Add(first);
+        //    firstAndLast.Add(last);
 
-            MatchedOrder current = new MatchedOrder()
-            {
-                AccountCode = "TEST12345",
-                UserId = "TESTACCOUNT",
-                MatchedOrderID = 1,
-                OrderDatetime = new DateTime(2015, 6, 5),
-                Side = "SELL",
-                StockCode = "TEST",
-                BoardLot = "MAIN",
-                MatchDate = "06/05/2015",
-                Price = 5.0M,
-                Quantity = 1000
-            };
-            List<MatchedOrder> currentQuery = new List<MatchedOrder>();
-            currentQuery.Add(first);
+        //    MatchedOrder current = new MatchedOrder()
+        //    {
+        //        AccountCode = "TEST12345",
+        //        UserId = "TESTACCOUNT",
+        //        MatchedOrderID = 1,
+        //        OrderDatetime = new DateTime(2015, 6, 5),
+        //        Side = "SELL",
+        //        StockCode = "TEST",
+        //        BoardLot = "MAIN",
+        //        MatchDate = "06/05/2015",
+        //        Price = 5.0M,
+        //        Quantity = 1000
+        //    };
+        //    List<MatchedOrder> currentQuery = new List<MatchedOrder>();
+        //    currentQuery.Add(first);
 
-            StockXDBController sControl = new StockXDBController();
+        //    StockXDBController sControl = new StockXDBController();
 
-            if (firstAndLast[0] != firstAndLast[1])
-            {
-                currentQuery.Add(firstAndLast[1]);
-                currentQuery.Reverse();
-            }
+        //    if (firstAndLast[0] != firstAndLast[1])
+        //    {
+        //        currentQuery.Add(firstAndLast[1]);
+        //        currentQuery.Reverse();
+        //    }
 
-            var list = sControl.TransformMatchedOrderToClientAverageCostList(currentQuery);
-            sControl.CalculateAvgCost(currentQuery,list);
-            Console.WriteLine(list[1].AverageCost);
-            Console.WriteLine(list[1].SumOfNetPrice);
-            Console.WriteLine(list[1].NetVolume);
-            Console.ReadKey();
-        }
-        static void MainA(string[] args)
-        {
-            var s = new StockXDBController();
-            DateTime baseDate = new DateTime(2015, 7, 16,23,0,0);
-            List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12348", "TEST",baseDate);
-            var firstAndLast = s.GetLastRecord("TEST12348", "TEST", baseDate);
-            list.Reverse();
+        //    var list = sControl.TransformMatchedOrderToClientAverageCostList(currentQuery);
+        //    sControl.CalculateAvgCost(currentQuery,list);
+        //    Console.WriteLine(list[1].AverageCost);
+        //    Console.WriteLine(list[1].SumOfNetPrice);
+        //    Console.WriteLine(list[1].NetVolume);
+        //    Console.ReadKey();
+        //}
+        //static void MainA(string[] args)
+        //{
+        //    var s = new StockXDBController();
+        //    DateTime baseDate = new DateTime(2015, 7, 16,23,0,0);
+        //    List<MatchedOrder> list = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12348", "TEST",baseDate);
+        //    var firstAndLast = s.GetLastRecord("TEST12348", "TEST", baseDate);
+        //    list.Reverse();
 
-            List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
+        //    List<ClientAverageCost> clientList = s.TransformMatchedOrderToClientAverageCostList(list);
 
-            Console.WriteLine("MatchedOrder List");
-            Console.WriteLine("-----------------------");
-            foreach (MatchedOrder item in list)
-            {
-                Console.WriteLine("Account Code: {0}",item.AccountCode);
-                Console.WriteLine("User ID: {0}", item.UserId);
-                Console.WriteLine("Side: {0}", item.Side);
-                Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
-                Console.WriteLine("Stock Code: {0}", item.StockCode);
-                Console.WriteLine("Price: {0}", item.Price);
-                Console.WriteLine("Quantity: {0}", item.Quantity);
-                Console.WriteLine("Match Date: {0}", item.MatchDate);
-                Console.WriteLine("--");
-            }
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("ClientAverageCost List");
-            Console.WriteLine("-----------------------");
-            foreach (ClientAverageCost client in clientList)
-            {
-                Console.WriteLine("Date: {0}", client.Date);
-                Console.WriteLine("Cost: {0}", client.Cost);
-                Console.WriteLine("Volume: {0}", client.Volume);
-                Console.WriteLine("Side: {0}", client.Side);
-                Console.WriteLine("--");
-            }
+        //    Console.WriteLine("MatchedOrder List");
+        //    Console.WriteLine("-----------------------");
+        //    foreach (MatchedOrder item in list)
+        //    {
+        //        Console.WriteLine("Account Code: {0}",item.AccountCode);
+        //        Console.WriteLine("User ID: {0}", item.UserId);
+        //        Console.WriteLine("Side: {0}", item.Side);
+        //        Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
+        //        Console.WriteLine("Stock Code: {0}", item.StockCode);
+        //        Console.WriteLine("Price: {0}", item.Price);
+        //        Console.WriteLine("Quantity: {0}", item.Quantity);
+        //        Console.WriteLine("Match Date: {0}", item.MatchDate);
+        //        Console.WriteLine("--");
+        //    }
+        //    Console.WriteLine("-----------------------");
+        //    Console.WriteLine("ClientAverageCost List");
+        //    Console.WriteLine("-----------------------");
+        //    foreach (ClientAverageCost client in clientList)
+        //    {
+        //        Console.WriteLine("Date: {0}", client.Date);
+        //        Console.WriteLine("Cost: {0}", client.Cost);
+        //        Console.WriteLine("Volume: {0}", client.Volume);
+        //        Console.WriteLine("Side: {0}", client.Side);
+        //        Console.WriteLine("--");
+        //    }
 
-            s.CalculateAvgCost(list,clientList);
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("ClientAverageCost AverageCost Calculation");
-            Console.WriteLine("-----------------------");
-            foreach (ClientAverageCost client in clientList)
-            {
-                Console.WriteLine("Sum of Net Price: {0}", client.SumOfNetPrice);
-                Console.WriteLine("Net Volume: {0}", client.NetVolume);
-                Console.WriteLine("Average Cost: {0}", client.AverageCost);
-                Console.WriteLine("--");
-            }
-            Console.WriteLine("MatchedOrder List After Calculation");
-            Console.WriteLine("-----------------------");
-            foreach (MatchedOrder item in list)
-            {
-                Console.WriteLine("Account Code: {0}", item.AccountCode);
-                Console.WriteLine("User ID: {0}", item.UserId);
-                Console.WriteLine("Side: {0}", item.Side);
-                Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
-                Console.WriteLine("Stock Code: {0}", item.StockCode);
-                Console.WriteLine("Price: {0}", item.Price);
-                Console.WriteLine("Quantity: {0}", item.Quantity);
-                Console.WriteLine("Match Date: {0}", item.MatchDate);
-                Console.WriteLine("Net Price: {0}", item.NetPrice);
-                Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
-                Console.WriteLine("Net Volume: {0}", item.NetVolume);
-                Console.WriteLine("Avg Cost: {0}", item.AvgCost);
-                Console.WriteLine("--");
-            }
+        //    s.CalculateAvgCost(list,clientList);
+        //    Console.WriteLine("-----------------------");
+        //    Console.WriteLine("ClientAverageCost AverageCost Calculation");
+        //    Console.WriteLine("-----------------------");
+        //    foreach (ClientAverageCost client in clientList)
+        //    {
+        //        Console.WriteLine("Sum of Net Price: {0}", client.SumOfNetPrice);
+        //        Console.WriteLine("Net Volume: {0}", client.NetVolume);
+        //        Console.WriteLine("Average Cost: {0}", client.AverageCost);
+        //        Console.WriteLine("--");
+        //    }
+        //    Console.WriteLine("MatchedOrder List After Calculation");
+        //    Console.WriteLine("-----------------------");
+        //    foreach (MatchedOrder item in list)
+        //    {
+        //        Console.WriteLine("Account Code: {0}", item.AccountCode);
+        //        Console.WriteLine("User ID: {0}", item.UserId);
+        //        Console.WriteLine("Side: {0}", item.Side);
+        //        Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
+        //        Console.WriteLine("Stock Code: {0}", item.StockCode);
+        //        Console.WriteLine("Price: {0}", item.Price);
+        //        Console.WriteLine("Quantity: {0}", item.Quantity);
+        //        Console.WriteLine("Match Date: {0}", item.MatchDate);
+        //        Console.WriteLine("Net Price: {0}", item.NetPrice);
+        //        Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
+        //        Console.WriteLine("Net Volume: {0}", item.NetVolume);
+        //        Console.WriteLine("Avg Cost: {0}", item.AvgCost);
+        //        Console.WriteLine("--");
+        //    }
 
-            s.SaveToDB(list);
-
-
-            List<MatchedOrder> newlist = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12345", "TEST", baseDate);
-
-            foreach (MatchedOrder item in newlist)
-            {
-                Console.WriteLine("new Account Code: {0}", item.AccountCode);
-                Console.WriteLine("User ID: {0}", item.UserId);
-                Console.WriteLine("Side: {0}", item.Side);
-                Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
-                Console.WriteLine("Stock Code: {0}", item.StockCode);
-                Console.WriteLine("Price: {0}", item.Price);
-                Console.WriteLine("Quantity: {0}", item.Quantity);
-                Console.WriteLine("Match Date: {0}", item.MatchDate);
-                Console.WriteLine("Net Price: {0}", item.NetPrice);
-                Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
-                Console.WriteLine("Net Volume: {0}", item.NetVolume);
-                Console.WriteLine("Avg Cost: {0}", item.AvgCost);
-                Console.WriteLine("new --");
-            }
+        //    s.SaveToDB(list);
 
 
-            Console.ReadKey();
-        }
+        //    List<MatchedOrder> newlist = s.GetPreviousMatchedOrdersByAccountCodeAndStockCode("TEST12345", "TEST", baseDate);
+
+        //    foreach (MatchedOrder item in newlist)
+        //    {
+        //        Console.WriteLine("new Account Code: {0}", item.AccountCode);
+        //        Console.WriteLine("User ID: {0}", item.UserId);
+        //        Console.WriteLine("Side: {0}", item.Side);
+        //        Console.WriteLine("Order Datetime: {0}", item.OrderDatetime);
+        //        Console.WriteLine("Stock Code: {0}", item.StockCode);
+        //        Console.WriteLine("Price: {0}", item.Price);
+        //        Console.WriteLine("Quantity: {0}", item.Quantity);
+        //        Console.WriteLine("Match Date: {0}", item.MatchDate);
+        //        Console.WriteLine("Net Price: {0}", item.NetPrice);
+        //        Console.WriteLine("Sum of Net Price: {0}", item.SumOfNetPrice);
+        //        Console.WriteLine("Net Volume: {0}", item.NetVolume);
+        //        Console.WriteLine("Avg Cost: {0}", item.AvgCost);
+        //        Console.WriteLine("new --");
+        //    }
+
+
+        //    Console.ReadKey();
+        //}
         //static void Main1(string[] args)
         //{
         //   List<ClientAverageCost> list = new List<ClientAverageCost>();

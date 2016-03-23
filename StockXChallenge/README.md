@@ -1,4 +1,8 @@
 # StockXChallenge plan
+todo: 3/28/2016
+1. add a unit test to see if the columns of all generated files have the right number, and eof file carriage return
+
+
 todo: 3/23/2016
 1. sell half of positions of both jerv and christine done
 2. add more stocks.  done

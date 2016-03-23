@@ -1,0 +1,43 @@
+Connection succeeded
+not null
+Done saving filled orders from Techni.
+account:OTA12352, stock code:AP
+side:S, Prev NETV:1000, NETV:0
+side:S, Prev AvgCost:43.9000, NETV:0, NetPrice: 0.0000
+updated list: 15, 43.9000
+updated list: 36, 0
+save to db  old id: 15,  avg cost:43.9000 new avg cost:43.9000 
+save to db  old id: 36,  avg cost: new avg cost:0 
+account:OTA12352, stock code:X
+side:S, Prev NETV:2000, NETV:0
+side:S, Prev AvgCost:17.4400, NETV:0, NetPrice: 0.0000
+updated list: 23, 17.4400
+updated list: 37, 0
+save to db  old id: 23,  avg cost:17.4400 new avg cost:17.4400 
+save to db  old id: 37,  avg cost: new avg cost:0 
+account:OTA12354, stock code:FLI
+side:S, Prev NETV:10000, NETV:0
+side:S, Prev AvgCost:1.7000, NETV:0, NetPrice: 0.0000
+updated list: 20, 1.7000
+updated list: 38, 0
+save to db  old id: 20,  avg cost:1.7000 new avg cost:1.7000 
+save to db  old id: 38,  avg cost: new avg cost:0 
+account:OTA12354, stock code:MER
+updated list: 39, 321.0000
+save to db  old id: 39,  avg cost: new avg cost:321.0000 
+finished calculating cash per account
+lookup account:OTA12352, stock:AP
+lookup account:OTA12352, stock:X
+finished calculating cash per account
+lookup account:OTA12354, stock:FLI
+lookup account:OTA12354, stock:MER
+Finished Processing orders from Techni. Hit any key
+Current closing price AC: 749.50
+Current closing price MBT: 87.20
+Current closing price MEG: 4.12
+Current closing price MER: 318.00
+Current closing price MRSGI: 3.90
+Current closing price RLC: 28.55
+Current closing price SMPH: 22.55
+Current closing price TEST: 0
+ 
