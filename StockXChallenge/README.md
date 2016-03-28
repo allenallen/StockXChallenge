@@ -1,8 +1,14 @@
 # StockXChallenge plan
+todo:
+
 todo: 3/28/2016
-1. add a unit test to see if the columns of all generated files have the right number, and eof file carriage return
-
-
+1. add a unit test to see if the columns of all generated files have the right number, and eof file carriage return --done
+2. Add a validation routine:
+2.a look at temp tables if it matches with the file. 
+3. deploy the program to 10.11.18.20
+4. add a windows task to run stockxchallenge.exe >> stockchallenge.log --done
+5. add a windows task to run dtexec.
+6. add a task to run emailer.  attach the log files:
 todo: 3/23/2016
 1. sell half of positions of both jerv and christine done
 2. add more stocks.  done

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using PortfolioController;
 using System.Data.SqlClient;
 using System.Data.SqlServerCe;
+using System.IO;
+using System.Configuration;
 
 namespace StockXChallenge
 {
@@ -108,11 +110,35 @@ namespace StockXChallenge
         }
         static void Main(string[] args)
         {
+
+            CheckIfPathsExists();
+
             DateTime date = DateTime.Now;
-            //CheckDB(args);
             Run(date);
-            //testCashUnit(args);
-           // Console.ReadKey();
+        }
+
+        private static void CheckIfPathsExists()
+        {
+            string root = @"C:\apps\";
+            string stockxpath = @"C:\apps\stockx";
+
+            if (!Directory.Exists(root))
+                Directory.CreateDirectory(root);
+
+            if (!Directory.Exists(stockxpath))
+                Directory.CreateDirectory(stockxpath);
+
+            if (!Directory.Exists(ConfigurationManager.AppSettings["txtFilesPath"].ToString()))
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["txtFilesPath"].ToString());
+
+            if (!Directory.Exists(ConfigurationManager.AppSettings["txtFilesBackupPath"].ToString()))
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["txtFilesBackupPath"].ToString());
+
+            if (!Directory.Exists(ConfigurationManager.AppSettings["pathToSendMail"].ToString()))
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["pathToSendMail"].ToString());
+
+            if (!Directory.Exists(ConfigurationManager.AppSettings["leaderboardTxtFile"].ToString()))
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["leaderboardTxtFile"].ToString());
         }
         static void ProcessOrdersFromTechni(DateTime date)
         {
@@ -127,7 +153,7 @@ namespace StockXChallenge
             s.GeneratePosCost(date);
             s.GenerateSOA(date);
             s.GenerateCash(date);
-            Console.WriteLine("Finished Processing orders from Techni. Hit any key");
+            Console.WriteLine("Finished Processing orders from Techni.");
         }
         //static void TestCash(string[] args)
         //{

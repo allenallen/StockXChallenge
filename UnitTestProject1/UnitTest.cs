@@ -21,7 +21,7 @@ namespace UnitTestProject1
             clients.Add(client);
             List<Leaderboard> list = LeaderBoardManager.GetLeaders(clients);
             Assert.IsTrue(list[0].Capital == 1000000);
-            Assert.IsTrue(list[0].PnL == 0.00309);
+            Assert.IsTrue(list[0].PnL == -0.02427);
         }
 
         [TestMethod]
@@ -36,6 +36,114 @@ namespace UnitTestProject1
             Assert.IsTrue(testPortfolio.Count == 1);
             Assert.IsTrue(testPortfolio[0].StockCode == "TEST");
             Assert.IsTrue(testPortfolio[0].Shares == 19000);
+        }
+
+        [TestMethod]
+        public void StockXTextFilesCheck()
+        {
+            string poscost = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString() + "poscost.txt";
+            string cash = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString() + "cash.txt";
+            string soa = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString() + "soa.txt";
+            string clients = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString() + "clients.txt";
+            string pledge = System.Configuration.ConfigurationManager.AppSettings["txtFilesPath"].ToString() + "pledge.txt";
+
+            string[] poscostTxt = File.ReadAllLines(poscost);
+            string[] cashTxt = File.ReadAllLines(cash);
+            string[] soaTxt = File.ReadAllLines(soa);
+            string[] clientsTxt = File.ReadAllLines(clients);
+            string[] pledgeTxt = File.ReadAllLines(pledge);
+
+            bool poscostCheck = true;
+            bool cashCheck = true;
+            bool soaCheck = true;
+            bool clientsCheck = true;
+            bool pledgeCheck = true;
+
+            for (int i = 0; i < poscostTxt.Length; i++)
+            {
+                if (i >= poscostTxt.Length - 2)
+                {
+                    poscostCheck = (poscostTxt[i] == "");
+                }
+                else
+                {
+                    string[] poscostLine = poscostTxt[i].Split(';');
+                    foreach (string item in poscostLine)
+                    {
+                        poscostCheck = (item != "");
+                    }
+                }
+            }
+
+            for (int i = 0; i < cashTxt.Length; i++)
+            {
+                if (i >= cashTxt.Length - 2)
+                {
+                    cashCheck = (cashTxt[i] == "");
+                }
+                else
+                {
+                    string[] cashLine = cashTxt[i].Split(';');
+                    foreach (string item in cashLine)
+                    {
+                        cashCheck = (item != "");
+                    }
+                }
+            }
+
+            for (int i = 0; i < soaTxt.Length; i++)
+            {
+                if (i >= soaTxt.Length - 2)
+                {
+                    soaCheck = (soaTxt[i] == "");
+                }
+                else
+                {
+                    string[] soaLine = soaTxt[i].Split(';');
+                    foreach (string item in soaLine)
+                    {
+                        soaCheck = (item != "");
+                    }
+                }
+            }
+
+            for (int i = 0; i < clientsTxt.Length; i++)
+            {
+                if (i >= clientsTxt.Length - 2)
+                {
+                    clientsCheck = (clientsTxt[i] == "");
+                }
+                else
+                {
+                    string[] clientsLine = clientsTxt[i].Split(';');
+                    foreach (string item in clientsLine)
+                    {
+                        clientsCheck = (item != "");
+                    }
+                }
+            }
+
+            for (int i = 0; i < pledgeTxt.Length; i++)
+            {
+                if (i >= pledgeTxt.Length - 2)
+                {
+                    pledgeCheck = (pledgeTxt[i] == "");
+                }
+                else
+                {
+                    string[] pledgeLine = pledgeTxt[i].Split(';');
+                    foreach (string item in pledgeLine)
+                    {
+                        pledgeCheck = (item != "");
+                    }
+                }
+            }
+
+            Assert.IsTrue(poscostCheck);
+            Assert.IsTrue(clientsCheck);
+            Assert.IsTrue(soaCheck);
+            Assert.IsTrue(pledgeCheck);
+            Assert.IsTrue(cashCheck);
         }
 
         [TestMethod]
