@@ -37,17 +37,15 @@ namespace StockXChallenge
         
         static void Run(DateTime date)
         {
-            //call it here
-
-            //Backup();
+            Console.Write("Getting Filled Orders from Techni..");
             GetFilledOrdersFromTechni();
             
-            //calculate average costs and cash
             ProcessOrdersFromTechni(date);
             ProcessPortfolio(date);
             ProcessClients();
             ProcessPledge();
             ProcessLeaders();
+            GenerateFiles(date);
         }
         private static void Backup()
         {
@@ -65,8 +63,10 @@ namespace StockXChallenge
         {
             var s = new StockXDBController();
             var list = s.GetReport1();
+            Console.WriteLine("okay");
+            Console.Write("Saving Filled Orders from Techni..");
             s.SaveNewListToDB(list);
-            Console.WriteLine("Done saving filled orders from Techni.");
+            Console.WriteLine("okay");
         }
         static void CheckDB(string[] args)
         {
@@ -96,8 +96,11 @@ namespace StockXChallenge
             using (var dbContext = new StockXDataBaseEntities())
             {
                 List<string> stocks = (from entry in dbContext.Portfolio
+                                       where entry.StockCode != "TEST"
                                        select entry.StockCode).Distinct().ToList();
+                Console.Write("Getting updated prices of stocks..");
                 Dictionary<string, decimal> updatedClosingPrices = s.GetUpdatedClosingPrices(stocks);
+
                 foreach (var item in updatedClosingPrices)
                 {
                     Console.WriteLine("Current closing price {0}: {1}", item.Key, item.Value);
@@ -110,20 +113,30 @@ namespace StockXChallenge
         }
         static void Main(string[] args)
         {
-
+            Console.Write("Checking paths..");
             CheckIfPathsExists();
-
+            Console.WriteLine("done.");
+            //Please add 23 hours
+            //DateTime date = new DateTime(2016, 3, 29,23,59,59);//DateTime.Now;
             DateTime date = DateTime.Now;
             Run(date);
         }
 
         private static void CheckIfPathsExists()
         {
-            string root = @"C:\apps\";
-            string stockxpath = @"C:\apps\stockx";
+            string root = @"C:\Technistock\";
+            string ssispath = @"C:\Technistock\SSIS\";
+            string stockxpath = @"C:\Technistock\SSIS\STOCKXCHALLENGE";
+            string techniSQLPath = @"C:\Technistock\SSIS\STOCKXCHALLENGE\SQL\";
 
             if (!Directory.Exists(root))
                 Directory.CreateDirectory(root);
+
+            if (!Directory.Exists(techniSQLPath))
+                Directory.CreateDirectory(techniSQLPath);
+
+            if (!Directory.Exists(ssispath))
+                Directory.CreateDirectory(ssispath);
 
             if (!Directory.Exists(stockxpath))
                 Directory.CreateDirectory(stockxpath);
@@ -134,26 +147,30 @@ namespace StockXChallenge
             if (!Directory.Exists(ConfigurationManager.AppSettings["txtFilesBackupPath"].ToString()))
                 Directory.CreateDirectory(ConfigurationManager.AppSettings["txtFilesBackupPath"].ToString());
 
-            if (!Directory.Exists(ConfigurationManager.AppSettings["pathToSendMail"].ToString()))
-                Directory.CreateDirectory(ConfigurationManager.AppSettings["pathToSendMail"].ToString());
-
             if (!Directory.Exists(ConfigurationManager.AppSettings["leaderboardTxtFile"].ToString()))
                 Directory.CreateDirectory(ConfigurationManager.AppSettings["leaderboardTxtFile"].ToString());
+        }
+        static void GenerateFiles(DateTime date)
+        {
+            var s = new StockXDBController();
+            Console.Write("Generating TextFiles..");
+            s.GeneratePosCost(date);
+            s.GenerateSOA(date);
+            s.GenerateCash(date);
+            Console.WriteLine("done");
+
         }
         static void ProcessOrdersFromTechni(DateTime date)
         {
             var s = new StockXDBController();
-            //var date = DateTime.Now;
-            //.GroupBy(x => new { x.Column1, x.Column2 })
-
-            var todayList = s.GetAllTodayRecords();
+            Console.WriteLine("Processing orders from Techni..");
+            var todayList = s.GetAllRecordsByDate(date);//s.GetAllTodayRecords();
             s.ProcessOrdersByDate(todayList, date);
-            s.ProcessCash(todayList, date);
-            //ProcessPortfolio();
-            s.GeneratePosCost(date);
-            s.GenerateSOA(date);
-            s.GenerateCash(date);
             Console.WriteLine("Finished Processing orders from Techni.");
+            Console.Write("Processing Cash..");
+            s.ProcessCash(todayList, date);
+            Console.WriteLine("Finished Processing cash.");
+
         }
         //static void TestCash(string[] args)
         //{

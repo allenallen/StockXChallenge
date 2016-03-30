@@ -1,5 +1,17 @@
 # StockXChallenge plan
-todo:
+todo: 3/30/2016
+1. update dll to uat
+2. automate ssis
+3. double check folder paths
+4. run unit tests 
+todo: 3/29/2016
+1. check the path.  delete un-used path. --done
+2. check where the path in app.config goes to generate the files. (needs to be where SSIS expects) --done
+3. error on running exe on 10.11.18.20 but not on desktop version (i updated portfoliocontroller.dll already)
+3. run dtexec in windows task.
+3.a.create bat file for dtexec
+4. update soa.txt, balance. --done
+
 
 todo: 3/28/2016
 1. add a unit test to see if the columns of all generated files have the right number, and eof file carriage return --done

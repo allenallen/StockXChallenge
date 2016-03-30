@@ -16,12 +16,12 @@ namespace UnitTestProject1
         public void LeaderBoardTest()
         {
             var s = new StockXDBController();
-            Client client = new Client {AccountCode="TEST12345", InitialCapital=1000000};
+            Client client = new Client {AccountCode="TEST12346", InitialCapital=1000000};
             List<Client> clients = new List<Client>();
             clients.Add(client);
             List<Leaderboard> list = LeaderBoardManager.GetLeaders(clients);
             Assert.IsTrue(list[0].Capital == 1000000);
-            Assert.IsTrue(list[0].PnL == -0.02427);
+            Assert.IsTrue(list[0].PnL == -0.00028);
         }
 
         [TestMethod]
@@ -229,7 +229,7 @@ namespace UnitTestProject1
             //}
             var cash = s.CalculateCash("TEST12346", "7/15/2015", todayList);
          
-            Assert.IsTrue(Math.Round(cash.Amount,2) == 991650.00M);
+            Assert.IsTrue(Math.Round(cash.Amount,2) == 986250M);
 
             //cash = s.CalculateCash("TEST12345", "7/15/2015", todayList);
             //Assert.IsTrue(Math.Round(cash.Amount, 2) == 1511930.00M);
@@ -249,12 +249,6 @@ namespace UnitTestProject1
 
             var lines = File.ReadAllLines(poscostFilePath + "poscost.txt");
             //Assert.IsTrue(lines.Length == 2);
-
-        }
-
-        [TestMethod]
-        public void TestDBTwoSellBuy()
-        {
 
         }
 
